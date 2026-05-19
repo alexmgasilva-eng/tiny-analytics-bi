@@ -1,0 +1,181 @@
+﻿empresa,campo,total_linhas,problemas,percentual_problema
+SO BEBE,cliente,9,0,0.0
+SO BEBE,cpf_cnpj_cliente,9,0,0.0
+SO BEBE,cidade,9,0,0.0
+SO BEBE,uf,9,0,0.0
+SO BEBE,canal,9,0,0.0
+SO BEBE,ecommerce_nome,9,0,0.0
+SO BEBE,forma_envio,9,0,0.0
+SO BEBE,id_nota_fiscal,9,0,0.0
+SO BEBE,total_produtos,9,0,0.0
+SO BEBE,total_pedido,9,0,0.0
+CH BIKE BONNER,cliente,1,0,0.0
+CH BIKE BONNER,cpf_cnpj_cliente,1,0,0.0
+CH BIKE BONNER,cidade,1,0,0.0
+CH BIKE BONNER,uf,1,0,0.0
+CH BIKE BONNER,canal,1,0,0.0
+CH BIKE BONNER,ecommerce_nome,1,0,0.0
+CH BIKE BONNER,forma_envio,1,0,0.0
+CH BIKE BONNER,id_nota_fiscal,1,0,0.0
+CH BIKE BONNER,total_produtos,1,0,0.0
+CH BIKE BONNER,total_pedido,1,0,0.0
+CH BIKE LPS,cliente,1,0,0.0
+CH BIKE LPS,cpf_cnpj_cliente,1,0,0.0
+CH BIKE LPS,cidade,1,0,0.0
+CH BIKE LPS,uf,1,0,0.0
+CH BIKE LPS,canal,1,0,0.0
+CH BIKE LPS,ecommerce_nome,1,0,0.0
+CH BIKE LPS,forma_envio,1,0,0.0
+CH BIKE LPS,id_nota_fiscal,1,0,0.0
+CH BIKE LPS,total_produtos,1,0,0.0
+CH BIKE LPS,total_pedido,1,0,0.0
+CH BIKE PASSI,cliente,4,0,0.0
+CH BIKE PASSI,cpf_cnpj_cliente,4,0,0.0
+CH BIKE PASSI,cidade,4,0,0.0
+CH BIKE PASSI,uf,4,0,0.0
+CH BIKE PASSI,canal,4,0,0.0
+CH BIKE PASSI,ecommerce_nome,4,0,0.0
+CH BIKE PASSI,forma_envio,4,0,0.0
+CH BIKE PASSI,id_nota_fiscal,4,0,0.0
+CH BIKE PASSI,total_produtos,4,0,0.0
+CH BIKE PASSI,total_pedido,4,0,0.0
+DECO UTILIDADES,cliente,159,0,0.0
+DECO UTILIDADES,cpf_cnpj_cliente,159,147,92.45
+DECO UTILIDADES,cidade,159,1,0.63
+DECO UTILIDADES,uf,159,1,0.63
+DECO UTILIDADES,canal,159,158,99.37
+DECO UTILIDADES,ecommerce_nome,159,158,99.37
+DECO UTILIDADES,forma_envio,159,0,0.0
+DECO UTILIDADES,id_nota_fiscal,159,0,0.0
+DECO UTILIDADES,total_produtos,159,0,0.0
+DECO UTILIDADES,total_pedido,159,0,0.0
+DECO HOME,cliente,182,0,0.0
+DECO HOME,cpf_cnpj_cliente,182,0,0.0
+DECO HOME,cidade,182,0,0.0
+DECO HOME,uf,182,0,0.0
+DECO HOME,canal,182,0,0.0
+DECO HOME,ecommerce_nome,182,0,0.0
+DECO HOME,forma_envio,182,0,0.0
+DECO HOME,id_nota_fiscal,182,0,0.0
+DECO HOME,total_produtos,182,0,0.0
+DECO HOME,total_pedido,182,0,0.0
+DECO ELETRO,cliente,2238,0,0.0
+DECO ELETRO,cpf_cnpj_cliente,2238,2,0.09
+DECO ELETRO,cidade,2238,2,0.09
+DECO ELETRO,uf,2238,2,0.09
+DECO ELETRO,canal,2238,5,0.22
+DECO ELETRO,ecommerce_nome,2238,5,0.22
+DECO ELETRO,forma_envio,2238,0,0.0
+DECO ELETRO,id_nota_fiscal,2238,0,0.0
+DECO ELETRO,total_produtos,2238,0,0.0
+DECO ELETRO,total_pedido,2238,0,0.0
+LEKE MEIAS,cliente,90,0,0.0
+LEKE MEIAS,cpf_cnpj_cliente,90,0,0.0
+LEKE MEIAS,cidade,90,0,0.0
+LEKE MEIAS,uf,90,0,0.0
+LEKE MEIAS,canal,90,0,0.0
+LEKE MEIAS,ecommerce_nome,90,0,0.0
+LEKE MEIAS,forma_envio,90,0,0.0
+LEKE MEIAS,id_nota_fiscal,90,0,0.0
+LEKE MEIAS,total_produtos,90,0,0.0
+LEKE MEIAS,total_pedido,90,0,0.0
+DOKI HOME,cliente,65,0,0.0
+DOKI HOME,cpf_cnpj_cliente,65,10,15.38
+DOKI HOME,cidade,65,2,3.08
+DOKI HOME,uf,65,2,3.08
+DOKI HOME,canal,65,16,24.62
+DOKI HOME,ecommerce_nome,65,16,24.62
+DOKI HOME,forma_envio,65,0,0.0
+DOKI HOME,id_nota_fiscal,65,0,0.0
+DOKI HOME,total_produtos,65,0,0.0
+DOKI HOME,total_pedido,65,0,0.0
+OBA OBA,cliente,1343,0,0.0
+OBA OBA,cpf_cnpj_cliente,1343,1103,82.13
+OBA OBA,cidade,1343,14,1.04
+OBA OBA,uf,1343,14,1.04
+OBA OBA,canal,1343,1126,83.84
+OBA OBA,ecommerce_nome,1343,1126,83.84
+OBA OBA,forma_envio,1343,0,0.0
+OBA OBA,id_nota_fiscal,1343,0,0.0
+OBA OBA,total_produtos,1343,0,0.0
+OBA OBA,total_pedido,1343,3,0.22
+BIDU SHOP,cliente,244,0,0.0
+BIDU SHOP,cpf_cnpj_cliente,244,0,0.0
+BIDU SHOP,cidade,244,0,0.0
+BIDU SHOP,uf,244,0,0.0
+BIDU SHOP,canal,244,0,0.0
+BIDU SHOP,ecommerce_nome,244,0,0.0
+BIDU SHOP,forma_envio,244,0,0.0
+BIDU SHOP,id_nota_fiscal,244,0,0.0
+BIDU SHOP,total_produtos,244,0,0.0
+BIDU SHOP,total_pedido,244,0,0.0
+MVS,cliente,34,0,0.0
+MVS,cpf_cnpj_cliente,34,0,0.0
+MVS,cidade,34,0,0.0
+MVS,uf,34,0,0.0
+MVS,canal,34,0,0.0
+MVS,ecommerce_nome,34,0,0.0
+MVS,forma_envio,34,0,0.0
+MVS,id_nota_fiscal,34,0,0.0
+MVS,total_produtos,34,0,0.0
+MVS,total_pedido,34,0,0.0
+BELLA COMERCIAL,cliente,47,0,0.0
+BELLA COMERCIAL,cpf_cnpj_cliente,47,0,0.0
+BELLA COMERCIAL,cidade,47,0,0.0
+BELLA COMERCIAL,uf,47,0,0.0
+BELLA COMERCIAL,canal,47,0,0.0
+BELLA COMERCIAL,ecommerce_nome,47,0,0.0
+BELLA COMERCIAL,forma_envio,47,0,0.0
+BELLA COMERCIAL,id_nota_fiscal,47,0,0.0
+BELLA COMERCIAL,total_produtos,47,0,0.0
+BELLA COMERCIAL,total_pedido,47,0,0.0
+BALAO DE OFERTAS,cliente,223,0,0.0
+BALAO DE OFERTAS,cpf_cnpj_cliente,223,0,0.0
+BALAO DE OFERTAS,cidade,223,0,0.0
+BALAO DE OFERTAS,uf,223,0,0.0
+BALAO DE OFERTAS,canal,223,0,0.0
+BALAO DE OFERTAS,ecommerce_nome,223,0,0.0
+BALAO DE OFERTAS,forma_envio,223,0,0.0
+BALAO DE OFERTAS,id_nota_fiscal,223,0,0.0
+BALAO DE OFERTAS,total_produtos,223,0,0.0
+BALAO DE OFERTAS,total_pedido,223,0,0.0
+NOTA STORE,cliente,229,0,0.0
+NOTA STORE,cpf_cnpj_cliente,229,0,0.0
+NOTA STORE,cidade,229,0,0.0
+NOTA STORE,uf,229,0,0.0
+NOTA STORE,canal,229,0,0.0
+NOTA STORE,ecommerce_nome,229,0,0.0
+NOTA STORE,forma_envio,229,0,0.0
+NOTA STORE,id_nota_fiscal,229,0,0.0
+NOTA STORE,total_produtos,229,0,0.0
+NOTA STORE,total_pedido,229,0,0.0
+AF ESTOFADOS,cliente,3,0,0.0
+AF ESTOFADOS,cpf_cnpj_cliente,3,0,0.0
+AF ESTOFADOS,cidade,3,0,0.0
+AF ESTOFADOS,uf,3,0,0.0
+AF ESTOFADOS,canal,3,0,0.0
+AF ESTOFADOS,ecommerce_nome,3,0,0.0
+AF ESTOFADOS,forma_envio,3,0,0.0
+AF ESTOFADOS,id_nota_fiscal,3,0,0.0
+AF ESTOFADOS,total_produtos,3,0,0.0
+AF ESTOFADOS,total_pedido,3,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cliente,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cpf_cnpj_cliente,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cidade,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,uf,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,canal,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,ecommerce_nome,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,forma_envio,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,id_nota_fiscal,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,total_produtos,41,0,0.0
+CAJON MARCOS BRANDÃO LTDA,total_pedido,41,0,0.0
+SHALOM,cliente,131,0,0.0
+SHALOM,cpf_cnpj_cliente,131,0,0.0
+SHALOM,cidade,131,0,0.0
+SHALOM,uf,131,0,0.0
+SHALOM,canal,131,0,0.0
+SHALOM,ecommerce_nome,131,0,0.0
+SHALOM,forma_envio,131,0,0.0
+SHALOM,id_nota_fiscal,131,0,0.0
+SHALOM,total_produtos,131,0,0.0
+SHALOM,total_pedido,131,0,0.0
