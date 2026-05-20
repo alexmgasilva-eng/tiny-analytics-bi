@@ -17,40 +17,73 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.block-container { padding-top: 1.5rem; }
-.big-title { font-size: 34px; font-weight: 800; line-height: 1.1; }
-.sub-title { color: #9CA3AF; font-size: 18px; margin-top: 6px; }
+.block-container {
+    padding-top: 1.5rem;
+}
+
+.big-title {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.sub-title {
+    color: #9CA3AF;
+    font-size: 18px;
+    margin-top: 6px;
+}
+
+.ef-card {
+    background: #111827;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid #374151;
+}
 </style>
 """, unsafe_allow_html=True)
+
 
 def moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
+
 def numero(valor):
     return f"{valor:,.0f}".replace(",", ".")
 
+
 @st.cache_data
 def carregar_csv(nome):
-    return pd.read_csv(DATA_DIR / nome)
+    caminho = DATA_DIR / nome
+    return pd.read_csv(caminho)
+
 
 pedidos = carregar_csv("pedidos.csv")
 itens = carregar_csv("itens_pedido.csv")
 
-if "assessor" not in pedidos.columns:
-    pedidos["assessor"] = "SEM ASSESSOR"
+pedidos["total_pedido"] = pd.to_numeric(
+    pedidos["total_pedido"],
+    errors="coerce"
+).fillna(0)
 
-if "assessor" not in itens.columns:
-    itens["assessor"] = "SEM ASSESSOR"
+itens["valor_total_item"] = pd.to_numeric(
+    itens["valor_total_item"],
+    errors="coerce"
+).fillna(0)
 
-pedidos["total_pedido"] = pd.to_numeric(pedidos["total_pedido"], errors="coerce").fillna(0)
-itens["valor_total_item"] = pd.to_numeric(itens["valor_total_item"], errors="coerce").fillna(0)
-itens["quantidade"] = pd.to_numeric(itens["quantidade"], errors="coerce").fillna(0)
+itens["quantidade"] = pd.to_numeric(
+    itens["quantidade"],
+    errors="coerce"
+).fillna(0)
 
 pedidos["data_pedido_dt"] = pd.to_datetime(
     pedidos["data_pedido"],
     format="%d/%m/%Y",
     errors="coerce"
 )
+
+# =====================================================
+# CABEÇALHO
+# =====================================================
 
 col_logo, col_titulo = st.columns([1, 6])
 
@@ -72,27 +105,20 @@ with col_titulo:
 
 st.caption("Inteligência comercial multiempresa integrada ao Tiny ERP")
 
+# =====================================================
+# FILTROS
+# =====================================================
+
 st.sidebar.title("Filtros")
 
-assessores = sorted(pedidos["assessor"].dropna().unique())
 empresas = sorted(pedidos["empresa"].dropna().unique())
 canais = sorted(pedidos["canal"].dropna().unique())
 ufs = sorted(pedidos["uf"].dropna().unique())
 
-assessores_filtro = st.sidebar.multiselect(
-    "Assessor",
-    assessores,
-    default=assessores
-)
-
-empresas_filtradas_por_assessor = sorted(
-    pedidos[pedidos["assessor"].isin(assessores_filtro)]["empresa"].dropna().unique()
-)
-
 empresas_filtro = st.sidebar.multiselect(
     "Empresas",
-    empresas_filtradas_por_assessor,
-    default=empresas_filtradas_por_assessor
+    empresas,
+    default=empresas
 )
 
 canais_filtro = st.sidebar.multiselect(
@@ -108,8 +134,7 @@ ufs_filtro = st.sidebar.multiselect(
 )
 
 base_pedidos = pedidos[
-    pedidos["assessor"].isin(assessores_filtro)
-    & pedidos["empresa"].isin(empresas_filtro)
+    pedidos["empresa"].isin(empresas_filtro)
     & pedidos["canal"].isin(canais_filtro)
     & pedidos["uf"].isin(ufs_filtro)
 ].copy()
@@ -120,6 +145,10 @@ base_itens = itens[
     itens["id_pedido"].astype(str).isin(ids_pedidos)
 ].copy()
 
+# =====================================================
+# KPIS
+# =====================================================
+
 faturamento = base_pedidos["total_pedido"].sum()
 qtd_pedidos = base_pedidos["id_pedido"].nunique()
 ticket_medio = base_pedidos["total_pedido"].mean() if qtd_pedidos else 0
@@ -129,6 +158,7 @@ itens_vendidos = base_itens["quantidade"].sum()
 st.divider()
 
 c1, c2, c3, c4, c5 = st.columns(5)
+
 c1.metric("Faturamento", moeda(faturamento))
 c2.metric("Pedidos", numero(qtd_pedidos))
 c3.metric("Ticket médio", moeda(ticket_medio))
@@ -137,15 +167,22 @@ c5.metric("Itens vendidos", numero(itens_vendidos))
 
 st.caption(f"Última atualização visual: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
-aba_exec, aba_assessor, aba_emp, aba_prod, aba_cli, aba_alertas, aba_dados = st.tabs([
+# =====================================================
+# ABAS
+# =====================================================
+
+aba_exec, aba_emp, aba_prod, aba_cli, aba_alertas, aba_dados = st.tabs([
     "📌 Executivo",
-    "🧑‍💼 Assessores",
     "🏢 Empresas",
     "📦 Produtos",
     "👥 Clientes",
     "🚨 Alertas",
     "🧾 Dados"
 ])
+
+# =====================================================
+# EXECUTIVO
+# =====================================================
 
 with aba_exec:
     vendas_dia = (
@@ -210,58 +247,14 @@ with aba_exec:
 
     col2.plotly_chart(fig_uf, width="stretch")
 
-with aba_assessor:
-    st.subheader("Desempenho por Assessor")
-
-    ranking_assessor = (
-        base_pedidos
-        .groupby("assessor", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique"),
-            clientes=("cpf_cnpj_cliente", "nunique"),
-            empresas=("empresa", "nunique"),
-            ticket_medio=("total_pedido", "mean")
-        )
-        .sort_values("faturamento", ascending=False)
-    )
-
-    total_assessor = ranking_assessor["faturamento"].sum()
-
-    if total_assessor:
-        ranking_assessor["participacao"] = ranking_assessor["faturamento"] / total_assessor
-    else:
-        ranking_assessor["participacao"] = 0
-
-    fig_assessor = px.bar(
-        ranking_assessor,
-        x="assessor",
-        y="faturamento",
-        title="Faturamento por Assessor",
-        text_auto=".2s"
-    )
-
-    st.plotly_chart(fig_assessor, width="stretch")
-    st.dataframe(ranking_assessor, width="stretch")
-
-    st.subheader("Carteira por Assessor")
-
-    carteira = (
-        pedidos
-        .groupby(["assessor", "empresa"], as_index=False)
-        .agg(
-            pedidos=("id_pedido", "nunique"),
-            faturamento=("total_pedido", "sum")
-        )
-        .sort_values(["assessor", "faturamento"], ascending=[True, False])
-    )
-
-    st.dataframe(carteira, width="stretch")
+# =====================================================
+# EMPRESAS
+# =====================================================
 
 with aba_emp:
     ranking_empresas = (
         base_pedidos
-        .groupby(["assessor", "empresa"], as_index=False)
+        .groupby("empresa", as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
             pedidos=("id_pedido", "nunique"),
@@ -282,13 +275,16 @@ with aba_emp:
         ranking_empresas,
         x="empresa",
         y="faturamento",
-        color="assessor",
         title="Ranking de empresas por faturamento",
         text_auto=".2s"
     )
 
     st.plotly_chart(fig_emp, width="stretch")
     st.dataframe(ranking_empresas, width="stretch")
+
+# =====================================================
+# PRODUTOS
+# =====================================================
 
 with aba_prod:
     top_produtos = (
@@ -311,7 +307,11 @@ with aba_prod:
         orientation="h",
         title="Top 20 produtos por faturamento"
     )
-    fig_prod_fat.update_layout(yaxis={"categoryorder": "total ascending"})
+
+    fig_prod_fat.update_layout(
+        yaxis={"categoryorder": "total ascending"}
+    )
+
     col1.plotly_chart(fig_prod_fat, width="stretch")
 
     fig_prod_qtd = px.bar(
@@ -321,7 +321,11 @@ with aba_prod:
         orientation="h",
         title="Top 20 produtos por quantidade"
     )
-    fig_prod_qtd.update_layout(yaxis={"categoryorder": "total ascending"})
+
+    fig_prod_qtd.update_layout(
+        yaxis={"categoryorder": "total ascending"}
+    )
+
     col2.plotly_chart(fig_prod_qtd, width="stretch")
 
     abc = top_produtos.copy()
@@ -361,10 +365,14 @@ with aba_prod:
     else:
         st.info("Sem dados suficientes para Curva ABC.")
 
+# =====================================================
+# CLIENTES
+# =====================================================
+
 with aba_cli:
     top_clientes = (
         base_pedidos
-        .groupby(["assessor", "cliente", "cpf_cnpj_cliente", "cidade", "uf"], as_index=False)
+        .groupby(["cliente", "cpf_cnpj_cliente", "cidade", "uf"], as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
             pedidos=("id_pedido", "nunique"),
@@ -393,6 +401,10 @@ with aba_cli:
     st.subheader("Clientes recorrentes")
     st.dataframe(recorrentes, width="stretch")
 
+# =====================================================
+# ALERTAS
+# =====================================================
+
 with aba_alertas:
     st.subheader("Alertas inteligentes")
 
@@ -400,9 +412,6 @@ with aba_alertas:
 
     if "Não identificado" in base_pedidos["canal"].astype(str).unique():
         alertas.append("⚠️ Existem pedidos com canal não identificado.")
-
-    if "SEM ASSESSOR" in base_pedidos["assessor"].astype(str).unique():
-        alertas.append("⚠️ Existem pedidos sem assessor vinculado.")
 
     sem_cliente = base_pedidos[
         base_pedidos["cliente"].isna()
@@ -454,6 +463,10 @@ with aba_alertas:
             st.warning(alerta)
     else:
         st.success("Nenhum alerta crítico encontrado nos filtros atuais.")
+
+# =====================================================
+# DADOS
+# =====================================================
 
 with aba_dados:
     st.subheader("Base de pedidos")
