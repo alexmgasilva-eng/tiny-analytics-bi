@@ -1,181 +1,181 @@
-﻿empresa,campo,total_linhas,problemas,percentual_problema
-SO BEBE,cliente,9,0,0.0
-SO BEBE,cpf_cnpj_cliente,9,0,0.0
-SO BEBE,cidade,9,0,0.0
-SO BEBE,uf,9,0,0.0
-SO BEBE,canal,9,0,0.0
-SO BEBE,ecommerce_nome,9,0,0.0
-SO BEBE,forma_envio,9,0,0.0
-SO BEBE,id_nota_fiscal,9,0,0.0
-SO BEBE,total_produtos,9,0,0.0
-SO BEBE,total_pedido,9,0,0.0
-CH BIKE BONNER,cliente,1,0,0.0
-CH BIKE BONNER,cpf_cnpj_cliente,1,0,0.0
-CH BIKE BONNER,cidade,1,0,0.0
-CH BIKE BONNER,uf,1,0,0.0
-CH BIKE BONNER,canal,1,0,0.0
-CH BIKE BONNER,ecommerce_nome,1,0,0.0
-CH BIKE BONNER,forma_envio,1,0,0.0
-CH BIKE BONNER,id_nota_fiscal,1,0,0.0
-CH BIKE BONNER,total_produtos,1,0,0.0
-CH BIKE BONNER,total_pedido,1,0,0.0
-CH BIKE LPS,cliente,1,0,0.0
-CH BIKE LPS,cpf_cnpj_cliente,1,0,0.0
-CH BIKE LPS,cidade,1,0,0.0
-CH BIKE LPS,uf,1,0,0.0
-CH BIKE LPS,canal,1,0,0.0
-CH BIKE LPS,ecommerce_nome,1,0,0.0
-CH BIKE LPS,forma_envio,1,0,0.0
-CH BIKE LPS,id_nota_fiscal,1,0,0.0
-CH BIKE LPS,total_produtos,1,0,0.0
-CH BIKE LPS,total_pedido,1,0,0.0
-CH BIKE PASSI,cliente,4,0,0.0
-CH BIKE PASSI,cpf_cnpj_cliente,4,0,0.0
-CH BIKE PASSI,cidade,4,0,0.0
-CH BIKE PASSI,uf,4,0,0.0
-CH BIKE PASSI,canal,4,0,0.0
-CH BIKE PASSI,ecommerce_nome,4,0,0.0
-CH BIKE PASSI,forma_envio,4,0,0.0
-CH BIKE PASSI,id_nota_fiscal,4,0,0.0
-CH BIKE PASSI,total_produtos,4,0,0.0
-CH BIKE PASSI,total_pedido,4,0,0.0
-DECO UTILIDADES,cliente,164,0,0.0
-DECO UTILIDADES,cpf_cnpj_cliente,164,152,92.68
-DECO UTILIDADES,cidade,164,1,0.61
-DECO UTILIDADES,uf,164,1,0.61
-DECO UTILIDADES,canal,164,163,99.39
-DECO UTILIDADES,ecommerce_nome,164,163,99.39
-DECO UTILIDADES,forma_envio,164,0,0.0
-DECO UTILIDADES,id_nota_fiscal,164,0,0.0
-DECO UTILIDADES,total_produtos,164,0,0.0
-DECO UTILIDADES,total_pedido,164,0,0.0
-DECO HOME,cliente,191,0,0.0
-DECO HOME,cpf_cnpj_cliente,191,0,0.0
-DECO HOME,cidade,191,0,0.0
-DECO HOME,uf,191,0,0.0
-DECO HOME,canal,191,0,0.0
-DECO HOME,ecommerce_nome,191,0,0.0
-DECO HOME,forma_envio,191,0,0.0
-DECO HOME,id_nota_fiscal,191,0,0.0
-DECO HOME,total_produtos,191,0,0.0
-DECO HOME,total_pedido,191,0,0.0
-DECO ELETRO,cliente,2356,0,0.0
-DECO ELETRO,cpf_cnpj_cliente,2356,2,0.08
-DECO ELETRO,cidade,2356,2,0.08
-DECO ELETRO,uf,2356,2,0.08
-DECO ELETRO,canal,2356,5,0.21
-DECO ELETRO,ecommerce_nome,2356,5,0.21
-DECO ELETRO,forma_envio,2356,0,0.0
-DECO ELETRO,id_nota_fiscal,2356,0,0.0
-DECO ELETRO,total_produtos,2356,0,0.0
-DECO ELETRO,total_pedido,2356,0,0.0
-LEKE MEIAS,cliente,96,0,0.0
-LEKE MEIAS,cpf_cnpj_cliente,96,0,0.0
-LEKE MEIAS,cidade,96,0,0.0
-LEKE MEIAS,uf,96,0,0.0
-LEKE MEIAS,canal,96,0,0.0
-LEKE MEIAS,ecommerce_nome,96,0,0.0
-LEKE MEIAS,forma_envio,96,0,0.0
-LEKE MEIAS,id_nota_fiscal,96,0,0.0
-LEKE MEIAS,total_produtos,96,0,0.0
-LEKE MEIAS,total_pedido,96,0,0.0
-DOKI HOME,cliente,69,0,0.0
-DOKI HOME,cpf_cnpj_cliente,69,11,15.94
-DOKI HOME,cidade,69,2,2.9
-DOKI HOME,uf,69,2,2.9
-DOKI HOME,canal,69,19,27.54
-DOKI HOME,ecommerce_nome,69,19,27.54
-DOKI HOME,forma_envio,69,0,0.0
-DOKI HOME,id_nota_fiscal,69,0,0.0
-DOKI HOME,total_produtos,69,0,0.0
-DOKI HOME,total_pedido,69,0,0.0
-OBA OBA,cliente,1419,0,0.0
-OBA OBA,cpf_cnpj_cliente,1419,1169,82.38
-OBA OBA,cidade,1419,15,1.06
-OBA OBA,uf,1419,15,1.06
-OBA OBA,canal,1419,1193,84.07
-OBA OBA,ecommerce_nome,1419,1193,84.07
-OBA OBA,forma_envio,1419,0,0.0
-OBA OBA,id_nota_fiscal,1419,0,0.0
-OBA OBA,total_produtos,1419,0,0.0
-OBA OBA,total_pedido,1419,3,0.21
-BIDU SHOP,cliente,261,0,0.0
-BIDU SHOP,cpf_cnpj_cliente,261,0,0.0
-BIDU SHOP,cidade,261,0,0.0
-BIDU SHOP,uf,261,0,0.0
-BIDU SHOP,canal,261,0,0.0
-BIDU SHOP,ecommerce_nome,261,0,0.0
-BIDU SHOP,forma_envio,261,0,0.0
-BIDU SHOP,id_nota_fiscal,261,0,0.0
-BIDU SHOP,total_produtos,261,0,0.0
-BIDU SHOP,total_pedido,261,0,0.0
-MVS,cliente,35,0,0.0
-MVS,cpf_cnpj_cliente,35,0,0.0
-MVS,cidade,35,0,0.0
-MVS,uf,35,0,0.0
-MVS,canal,35,0,0.0
-MVS,ecommerce_nome,35,0,0.0
-MVS,forma_envio,35,0,0.0
-MVS,id_nota_fiscal,35,0,0.0
-MVS,total_produtos,35,0,0.0
-MVS,total_pedido,35,0,0.0
-BELLA COMERCIAL,cliente,53,0,0.0
-BELLA COMERCIAL,cpf_cnpj_cliente,53,0,0.0
-BELLA COMERCIAL,cidade,53,0,0.0
-BELLA COMERCIAL,uf,53,0,0.0
-BELLA COMERCIAL,canal,53,0,0.0
-BELLA COMERCIAL,ecommerce_nome,53,0,0.0
-BELLA COMERCIAL,forma_envio,53,0,0.0
-BELLA COMERCIAL,id_nota_fiscal,53,0,0.0
-BELLA COMERCIAL,total_produtos,53,0,0.0
-BELLA COMERCIAL,total_pedido,53,0,0.0
-BALAO DE OFERTAS,cliente,244,0,0.0
-BALAO DE OFERTAS,cpf_cnpj_cliente,244,0,0.0
-BALAO DE OFERTAS,cidade,244,0,0.0
-BALAO DE OFERTAS,uf,244,0,0.0
-BALAO DE OFERTAS,canal,244,0,0.0
-BALAO DE OFERTAS,ecommerce_nome,244,0,0.0
-BALAO DE OFERTAS,forma_envio,244,0,0.0
-BALAO DE OFERTAS,id_nota_fiscal,244,0,0.0
-BALAO DE OFERTAS,total_produtos,244,0,0.0
-BALAO DE OFERTAS,total_pedido,244,0,0.0
-NOTA STORE,cliente,244,0,0.0
-NOTA STORE,cpf_cnpj_cliente,244,0,0.0
-NOTA STORE,cidade,244,0,0.0
-NOTA STORE,uf,244,0,0.0
-NOTA STORE,canal,244,0,0.0
-NOTA STORE,ecommerce_nome,244,0,0.0
-NOTA STORE,forma_envio,244,0,0.0
-NOTA STORE,id_nota_fiscal,244,0,0.0
-NOTA STORE,total_produtos,244,0,0.0
-NOTA STORE,total_pedido,244,0,0.0
-AF ESTOFADOS,cliente,3,0,0.0
-AF ESTOFADOS,cpf_cnpj_cliente,3,0,0.0
-AF ESTOFADOS,cidade,3,0,0.0
-AF ESTOFADOS,uf,3,0,0.0
-AF ESTOFADOS,canal,3,0,0.0
-AF ESTOFADOS,ecommerce_nome,3,0,0.0
-AF ESTOFADOS,forma_envio,3,0,0.0
-AF ESTOFADOS,id_nota_fiscal,3,0,0.0
-AF ESTOFADOS,total_produtos,3,0,0.0
-AF ESTOFADOS,total_pedido,3,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cliente,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cpf_cnpj_cliente,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cidade,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,uf,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,canal,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,ecommerce_nome,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,forma_envio,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,id_nota_fiscal,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,total_produtos,43,0,0.0
-CAJON MARCOS BRANDÃO LTDA,total_pedido,43,0,0.0
-SHALOM,cliente,143,0,0.0
-SHALOM,cpf_cnpj_cliente,143,0,0.0
-SHALOM,cidade,143,0,0.0
-SHALOM,uf,143,0,0.0
-SHALOM,canal,143,0,0.0
-SHALOM,ecommerce_nome,143,0,0.0
-SHALOM,forma_envio,143,0,0.0
-SHALOM,id_nota_fiscal,143,0,0.0
-SHALOM,total_produtos,143,0,0.0
-SHALOM,total_pedido,143,0,0.0
+﻿empresa,campo,total_linhas,problemas,percentual_problema,assessor
+SO BEBE,cliente,9,0,0.0,JOYCE
+SO BEBE,cpf_cnpj_cliente,9,0,0.0,JOYCE
+SO BEBE,cidade,9,0,0.0,JOYCE
+SO BEBE,uf,9,0,0.0,JOYCE
+SO BEBE,canal,9,0,0.0,JOYCE
+SO BEBE,ecommerce_nome,9,0,0.0,JOYCE
+SO BEBE,forma_envio,9,0,0.0,JOYCE
+SO BEBE,id_nota_fiscal,9,0,0.0,JOYCE
+SO BEBE,total_produtos,9,0,0.0,JOYCE
+SO BEBE,total_pedido,9,0,0.0,JOYCE
+CH BIKE BONNER,cliente,1,0,0.0,CHRIS
+CH BIKE BONNER,cpf_cnpj_cliente,1,0,0.0,CHRIS
+CH BIKE BONNER,cidade,1,0,0.0,CHRIS
+CH BIKE BONNER,uf,1,0,0.0,CHRIS
+CH BIKE BONNER,canal,1,0,0.0,CHRIS
+CH BIKE BONNER,ecommerce_nome,1,0,0.0,CHRIS
+CH BIKE BONNER,forma_envio,1,0,0.0,CHRIS
+CH BIKE BONNER,id_nota_fiscal,1,0,0.0,CHRIS
+CH BIKE BONNER,total_produtos,1,0,0.0,CHRIS
+CH BIKE BONNER,total_pedido,1,0,0.0,CHRIS
+CH BIKE LPS,cliente,1,0,0.0,CHRIS
+CH BIKE LPS,cpf_cnpj_cliente,1,0,0.0,CHRIS
+CH BIKE LPS,cidade,1,0,0.0,CHRIS
+CH BIKE LPS,uf,1,0,0.0,CHRIS
+CH BIKE LPS,canal,1,0,0.0,CHRIS
+CH BIKE LPS,ecommerce_nome,1,0,0.0,CHRIS
+CH BIKE LPS,forma_envio,1,0,0.0,CHRIS
+CH BIKE LPS,id_nota_fiscal,1,0,0.0,CHRIS
+CH BIKE LPS,total_produtos,1,0,0.0,CHRIS
+CH BIKE LPS,total_pedido,1,0,0.0,CHRIS
+CH BIKE PASSI,cliente,4,0,0.0,CHRIS
+CH BIKE PASSI,cpf_cnpj_cliente,4,0,0.0,CHRIS
+CH BIKE PASSI,cidade,4,0,0.0,CHRIS
+CH BIKE PASSI,uf,4,0,0.0,CHRIS
+CH BIKE PASSI,canal,4,0,0.0,CHRIS
+CH BIKE PASSI,ecommerce_nome,4,0,0.0,CHRIS
+CH BIKE PASSI,forma_envio,4,0,0.0,CHRIS
+CH BIKE PASSI,id_nota_fiscal,4,0,0.0,CHRIS
+CH BIKE PASSI,total_produtos,4,0,0.0,CHRIS
+CH BIKE PASSI,total_pedido,4,0,0.0,CHRIS
+DECO UTILIDADES,cliente,165,0,0.0,JOYCE
+DECO UTILIDADES,cpf_cnpj_cliente,165,153,92.73,JOYCE
+DECO UTILIDADES,cidade,165,1,0.61,JOYCE
+DECO UTILIDADES,uf,165,1,0.61,JOYCE
+DECO UTILIDADES,canal,165,164,99.39,JOYCE
+DECO UTILIDADES,ecommerce_nome,165,164,99.39,JOYCE
+DECO UTILIDADES,forma_envio,165,0,0.0,JOYCE
+DECO UTILIDADES,id_nota_fiscal,165,0,0.0,JOYCE
+DECO UTILIDADES,total_produtos,165,0,0.0,JOYCE
+DECO UTILIDADES,total_pedido,165,0,0.0,JOYCE
+DECO HOME,cliente,191,0,0.0,JOYCE
+DECO HOME,cpf_cnpj_cliente,191,0,0.0,JOYCE
+DECO HOME,cidade,191,0,0.0,JOYCE
+DECO HOME,uf,191,0,0.0,JOYCE
+DECO HOME,canal,191,0,0.0,JOYCE
+DECO HOME,ecommerce_nome,191,0,0.0,JOYCE
+DECO HOME,forma_envio,191,0,0.0,JOYCE
+DECO HOME,id_nota_fiscal,191,0,0.0,JOYCE
+DECO HOME,total_produtos,191,0,0.0,JOYCE
+DECO HOME,total_pedido,191,0,0.0,JOYCE
+DECO ELETRO,cliente,2360,0,0.0,CHRIS
+DECO ELETRO,cpf_cnpj_cliente,2360,2,0.08,CHRIS
+DECO ELETRO,cidade,2360,2,0.08,CHRIS
+DECO ELETRO,uf,2360,2,0.08,CHRIS
+DECO ELETRO,canal,2360,5,0.21,CHRIS
+DECO ELETRO,ecommerce_nome,2360,5,0.21,CHRIS
+DECO ELETRO,forma_envio,2360,0,0.0,CHRIS
+DECO ELETRO,id_nota_fiscal,2360,0,0.0,CHRIS
+DECO ELETRO,total_produtos,2360,0,0.0,CHRIS
+DECO ELETRO,total_pedido,2360,0,0.0,CHRIS
+LEKE MEIAS,cliente,96,0,0.0,JOYCE
+LEKE MEIAS,cpf_cnpj_cliente,96,0,0.0,JOYCE
+LEKE MEIAS,cidade,96,0,0.0,JOYCE
+LEKE MEIAS,uf,96,0,0.0,JOYCE
+LEKE MEIAS,canal,96,0,0.0,JOYCE
+LEKE MEIAS,ecommerce_nome,96,0,0.0,JOYCE
+LEKE MEIAS,forma_envio,96,0,0.0,JOYCE
+LEKE MEIAS,id_nota_fiscal,96,0,0.0,JOYCE
+LEKE MEIAS,total_produtos,96,0,0.0,JOYCE
+LEKE MEIAS,total_pedido,96,0,0.0,JOYCE
+DOKI HOME,cliente,69,0,0.0,CHRIS
+DOKI HOME,cpf_cnpj_cliente,69,11,15.94,CHRIS
+DOKI HOME,cidade,69,2,2.9,CHRIS
+DOKI HOME,uf,69,2,2.9,CHRIS
+DOKI HOME,canal,69,19,27.54,CHRIS
+DOKI HOME,ecommerce_nome,69,19,27.54,CHRIS
+DOKI HOME,forma_envio,69,0,0.0,CHRIS
+DOKI HOME,id_nota_fiscal,69,0,0.0,CHRIS
+DOKI HOME,total_produtos,69,0,0.0,CHRIS
+DOKI HOME,total_pedido,69,0,0.0,CHRIS
+OBA OBA,cliente,1426,0,0.0,CHRIS
+OBA OBA,cpf_cnpj_cliente,1426,1176,82.47,CHRIS
+OBA OBA,cidade,1426,15,1.05,CHRIS
+OBA OBA,uf,1426,15,1.05,CHRIS
+OBA OBA,canal,1426,1200,84.15,CHRIS
+OBA OBA,ecommerce_nome,1426,1200,84.15,CHRIS
+OBA OBA,forma_envio,1426,0,0.0,CHRIS
+OBA OBA,id_nota_fiscal,1426,0,0.0,CHRIS
+OBA OBA,total_produtos,1426,0,0.0,CHRIS
+OBA OBA,total_pedido,1426,3,0.21,CHRIS
+BIDU SHOP,cliente,262,0,0.0,JOYCE
+BIDU SHOP,cpf_cnpj_cliente,262,0,0.0,JOYCE
+BIDU SHOP,cidade,262,0,0.0,JOYCE
+BIDU SHOP,uf,262,0,0.0,JOYCE
+BIDU SHOP,canal,262,0,0.0,JOYCE
+BIDU SHOP,ecommerce_nome,262,0,0.0,JOYCE
+BIDU SHOP,forma_envio,262,0,0.0,JOYCE
+BIDU SHOP,id_nota_fiscal,262,0,0.0,JOYCE
+BIDU SHOP,total_produtos,262,0,0.0,JOYCE
+BIDU SHOP,total_pedido,262,0,0.0,JOYCE
+MVS,cliente,37,0,0.0,JOYCE
+MVS,cpf_cnpj_cliente,37,0,0.0,JOYCE
+MVS,cidade,37,0,0.0,JOYCE
+MVS,uf,37,0,0.0,JOYCE
+MVS,canal,37,0,0.0,JOYCE
+MVS,ecommerce_nome,37,0,0.0,JOYCE
+MVS,forma_envio,37,0,0.0,JOYCE
+MVS,id_nota_fiscal,37,0,0.0,JOYCE
+MVS,total_produtos,37,0,0.0,JOYCE
+MVS,total_pedido,37,0,0.0,JOYCE
+BELLA COMERCIAL,cliente,53,0,0.0,JOYCE
+BELLA COMERCIAL,cpf_cnpj_cliente,53,0,0.0,JOYCE
+BELLA COMERCIAL,cidade,53,0,0.0,JOYCE
+BELLA COMERCIAL,uf,53,0,0.0,JOYCE
+BELLA COMERCIAL,canal,53,0,0.0,JOYCE
+BELLA COMERCIAL,ecommerce_nome,53,0,0.0,JOYCE
+BELLA COMERCIAL,forma_envio,53,0,0.0,JOYCE
+BELLA COMERCIAL,id_nota_fiscal,53,0,0.0,JOYCE
+BELLA COMERCIAL,total_produtos,53,0,0.0,JOYCE
+BELLA COMERCIAL,total_pedido,53,0,0.0,JOYCE
+BALAO DE OFERTAS,cliente,248,0,0.0,JOYCE
+BALAO DE OFERTAS,cpf_cnpj_cliente,248,0,0.0,JOYCE
+BALAO DE OFERTAS,cidade,248,0,0.0,JOYCE
+BALAO DE OFERTAS,uf,248,0,0.0,JOYCE
+BALAO DE OFERTAS,canal,248,0,0.0,JOYCE
+BALAO DE OFERTAS,ecommerce_nome,248,0,0.0,JOYCE
+BALAO DE OFERTAS,forma_envio,248,0,0.0,JOYCE
+BALAO DE OFERTAS,id_nota_fiscal,248,0,0.0,JOYCE
+BALAO DE OFERTAS,total_produtos,248,0,0.0,JOYCE
+BALAO DE OFERTAS,total_pedido,248,0,0.0,JOYCE
+NOTA STORE,cliente,244,0,0.0,JOYCE
+NOTA STORE,cpf_cnpj_cliente,244,0,0.0,JOYCE
+NOTA STORE,cidade,244,0,0.0,JOYCE
+NOTA STORE,uf,244,0,0.0,JOYCE
+NOTA STORE,canal,244,0,0.0,JOYCE
+NOTA STORE,ecommerce_nome,244,0,0.0,JOYCE
+NOTA STORE,forma_envio,244,0,0.0,JOYCE
+NOTA STORE,id_nota_fiscal,244,0,0.0,JOYCE
+NOTA STORE,total_produtos,244,0,0.0,JOYCE
+NOTA STORE,total_pedido,244,0,0.0,JOYCE
+AF ESTOFADOS,cliente,3,0,0.0,CHRIS
+AF ESTOFADOS,cpf_cnpj_cliente,3,0,0.0,CHRIS
+AF ESTOFADOS,cidade,3,0,0.0,CHRIS
+AF ESTOFADOS,uf,3,0,0.0,CHRIS
+AF ESTOFADOS,canal,3,0,0.0,CHRIS
+AF ESTOFADOS,ecommerce_nome,3,0,0.0,CHRIS
+AF ESTOFADOS,forma_envio,3,0,0.0,CHRIS
+AF ESTOFADOS,id_nota_fiscal,3,0,0.0,CHRIS
+AF ESTOFADOS,total_produtos,3,0,0.0,CHRIS
+AF ESTOFADOS,total_pedido,3,0,0.0,CHRIS
+CAJON MARCOS BRANDÃO LTDA,cliente,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,cpf_cnpj_cliente,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,cidade,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,uf,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,canal,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,ecommerce_nome,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,forma_envio,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,id_nota_fiscal,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,total_produtos,43,0,0.0,JOYCE
+CAJON MARCOS BRANDÃO LTDA,total_pedido,43,0,0.0,JOYCE
+SHALOM,cliente,143,0,0.0,CHRIS
+SHALOM,cpf_cnpj_cliente,143,0,0.0,CHRIS
+SHALOM,cidade,143,0,0.0,CHRIS
+SHALOM,uf,143,0,0.0,CHRIS
+SHALOM,canal,143,0,0.0,CHRIS
+SHALOM,ecommerce_nome,143,0,0.0,CHRIS
+SHALOM,forma_envio,143,0,0.0,CHRIS
+SHALOM,id_nota_fiscal,143,0,0.0,CHRIS
+SHALOM,total_produtos,143,0,0.0,CHRIS
+SHALOM,total_pedido,143,0,0.0,CHRIS
