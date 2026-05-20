@@ -39,76 +39,76 @@ CH BIKE PASSI,forma_envio,4,0,0.0
 CH BIKE PASSI,id_nota_fiscal,4,0,0.0
 CH BIKE PASSI,total_produtos,4,0,0.0
 CH BIKE PASSI,total_pedido,4,0,0.0
-DECO UTILIDADES,cliente,159,0,0.0
-DECO UTILIDADES,cpf_cnpj_cliente,159,147,92.45
-DECO UTILIDADES,cidade,159,1,0.63
-DECO UTILIDADES,uf,159,1,0.63
-DECO UTILIDADES,canal,159,158,99.37
-DECO UTILIDADES,ecommerce_nome,159,158,99.37
-DECO UTILIDADES,forma_envio,159,0,0.0
-DECO UTILIDADES,id_nota_fiscal,159,0,0.0
-DECO UTILIDADES,total_produtos,159,0,0.0
-DECO UTILIDADES,total_pedido,159,0,0.0
-DECO HOME,cliente,182,0,0.0
-DECO HOME,cpf_cnpj_cliente,182,0,0.0
-DECO HOME,cidade,182,0,0.0
-DECO HOME,uf,182,0,0.0
-DECO HOME,canal,182,0,0.0
-DECO HOME,ecommerce_nome,182,0,0.0
-DECO HOME,forma_envio,182,0,0.0
-DECO HOME,id_nota_fiscal,182,0,0.0
-DECO HOME,total_produtos,182,0,0.0
-DECO HOME,total_pedido,182,0,0.0
-DECO ELETRO,cliente,2238,0,0.0
-DECO ELETRO,cpf_cnpj_cliente,2238,2,0.09
-DECO ELETRO,cidade,2238,2,0.09
-DECO ELETRO,uf,2238,2,0.09
-DECO ELETRO,canal,2238,5,0.22
-DECO ELETRO,ecommerce_nome,2238,5,0.22
-DECO ELETRO,forma_envio,2238,0,0.0
-DECO ELETRO,id_nota_fiscal,2238,0,0.0
-DECO ELETRO,total_produtos,2238,0,0.0
-DECO ELETRO,total_pedido,2238,0,0.0
-LEKE MEIAS,cliente,90,0,0.0
-LEKE MEIAS,cpf_cnpj_cliente,90,0,0.0
-LEKE MEIAS,cidade,90,0,0.0
-LEKE MEIAS,uf,90,0,0.0
-LEKE MEIAS,canal,90,0,0.0
-LEKE MEIAS,ecommerce_nome,90,0,0.0
-LEKE MEIAS,forma_envio,90,0,0.0
-LEKE MEIAS,id_nota_fiscal,90,0,0.0
-LEKE MEIAS,total_produtos,90,0,0.0
-LEKE MEIAS,total_pedido,90,0,0.0
-DOKI HOME,cliente,65,0,0.0
-DOKI HOME,cpf_cnpj_cliente,65,10,15.38
-DOKI HOME,cidade,65,2,3.08
-DOKI HOME,uf,65,2,3.08
-DOKI HOME,canal,65,16,24.62
-DOKI HOME,ecommerce_nome,65,16,24.62
-DOKI HOME,forma_envio,65,0,0.0
-DOKI HOME,id_nota_fiscal,65,0,0.0
-DOKI HOME,total_produtos,65,0,0.0
-DOKI HOME,total_pedido,65,0,0.0
-OBA OBA,cliente,1343,0,0.0
-OBA OBA,cpf_cnpj_cliente,1343,1103,82.13
-OBA OBA,cidade,1343,14,1.04
-OBA OBA,uf,1343,14,1.04
-OBA OBA,canal,1343,1126,83.84
-OBA OBA,ecommerce_nome,1343,1126,83.84
-OBA OBA,forma_envio,1343,0,0.0
-OBA OBA,id_nota_fiscal,1343,0,0.0
-OBA OBA,total_produtos,1343,0,0.0
-OBA OBA,total_pedido,1343,3,0.22
-BIDU SHOP,cliente,244,0,0.0
-BIDU SHOP,cpf_cnpj_cliente,244,0,0.0
-BIDU SHOP,cidade,244,0,0.0
-BIDU SHOP,uf,244,0,0.0
-BIDU SHOP,canal,244,0,0.0
-BIDU SHOP,ecommerce_nome,244,0,0.0
-BIDU SHOP,forma_envio,244,0,0.0
-BIDU SHOP,id_nota_fiscal,244,0,0.0
-BIDU SHOP,total_produtos,244,0,0.0
-BIDU SHOP,total_pedido,244,0,0.0
+DECO UTILIDADES,cliente,160,0,0.0
+DECO UTILIDADES,cpf_cnpj_cliente,160,148,92.5
+DECO UTILIDADES,cidade,160,1,0.62
+DECO UTILIDADES,uf,160,1,0.62
+DECO UTILIDADES,canal,160,159,99.38
+DECO UTILIDADES,ecommerce_nome,160,159,99.38
+DECO UTILIDADES,forma_envio,160,0,0.0
+DECO UTILIDADES,id_nota_fiscal,160,0,0.0
+DECO UTILIDADES,total_produtos,160,0,0.0
+DECO UTILIDADES,total_pedido,160,0,0.0
+DECO HOME,cliente,191,0,0.0
+DECO HOME,cpf_cnpj_cliente,191,0,0.0
+DECO HOME,cidade,191,0,0.0
+DECO HOME,uf,191,0,0.0
+DECO HOME,canal,191,0,0.0
+DECO HOME,ecommerce_nome,191,0,0.0
+DECO HOME,forma_envio,191,0,0.0
+DECO HOME,id_nota_fiscal,191,0,0.0
+DECO HOME,total_produtos,191,0,0.0
+DECO HOME,total_pedido,191,0,0.0
+DECO ELETRO,cliente,2330,0,0.0
+DECO ELETRO,cpf_cnpj_cliente,2330,2,0.09
+DECO ELETRO,cidade,2330,2,0.09
+DECO ELETRO,uf,2330,2,0.09
+DECO ELETRO,canal,2330,5,0.21
+DECO ELETRO,ecommerce_nome,2330,5,0.21
+DECO ELETRO,forma_envio,2330,0,0.0
+DECO ELETRO,id_nota_fiscal,2330,0,0.0
+DECO ELETRO,total_produtos,2330,0,0.0
+DECO ELETRO,total_pedido,2330,0,0.0
+LEKE MEIAS,cliente,93,0,0.0
+LEKE MEIAS,cpf_cnpj_cliente,93,0,0.0
+LEKE MEIAS,cidade,93,0,0.0
+LEKE MEIAS,uf,93,0,0.0
+LEKE MEIAS,canal,93,0,0.0
+LEKE MEIAS,ecommerce_nome,93,0,0.0
+LEKE MEIAS,forma_envio,93,0,0.0
+LEKE MEIAS,id_nota_fiscal,93,0,0.0
+LEKE MEIAS,total_produtos,93,0,0.0
+LEKE MEIAS,total_pedido,93,0,0.0
+DOKI HOME,cliente,68,0,0.0
+DOKI HOME,cpf_cnpj_cliente,68,10,14.71
+DOKI HOME,cidade,68,2,2.94
+DOKI HOME,uf,68,2,2.94
+DOKI HOME,canal,68,18,26.47
+DOKI HOME,ecommerce_nome,68,18,26.47
+DOKI HOME,forma_envio,68,0,0.0
+DOKI HOME,id_nota_fiscal,68,0,0.0
+DOKI HOME,total_produtos,68,0,0.0
+DOKI HOME,total_pedido,68,0,0.0
+OBA OBA,cliente,1384,0,0.0
+OBA OBA,cpf_cnpj_cliente,1384,1137,82.15
+OBA OBA,cidade,1384,14,1.01
+OBA OBA,uf,1384,14,1.01
+OBA OBA,canal,1384,1160,83.82
+OBA OBA,ecommerce_nome,1384,1160,83.82
+OBA OBA,forma_envio,1384,0,0.0
+OBA OBA,id_nota_fiscal,1384,0,0.0
+OBA OBA,total_produtos,1384,0,0.0
+OBA OBA,total_pedido,1384,3,0.22
+BIDU SHOP,cliente,259,0,0.0
+BIDU SHOP,cpf_cnpj_cliente,259,0,0.0
+BIDU SHOP,cidade,259,0,0.0
+BIDU SHOP,uf,259,0,0.0
+BIDU SHOP,canal,259,0,0.0
+BIDU SHOP,ecommerce_nome,259,0,0.0
+BIDU SHOP,forma_envio,259,0,0.0
+BIDU SHOP,id_nota_fiscal,259,0,0.0
+BIDU SHOP,total_produtos,259,0,0.0
+BIDU SHOP,total_pedido,259,0,0.0
 MVS,cliente,34,0,0.0
 MVS,cpf_cnpj_cliente,34,0,0.0
 MVS,cidade,34,0,0.0
@@ -119,36 +119,36 @@ MVS,forma_envio,34,0,0.0
 MVS,id_nota_fiscal,34,0,0.0
 MVS,total_produtos,34,0,0.0
 MVS,total_pedido,34,0,0.0
-BELLA COMERCIAL,cliente,47,0,0.0
-BELLA COMERCIAL,cpf_cnpj_cliente,47,0,0.0
-BELLA COMERCIAL,cidade,47,0,0.0
-BELLA COMERCIAL,uf,47,0,0.0
-BELLA COMERCIAL,canal,47,0,0.0
-BELLA COMERCIAL,ecommerce_nome,47,0,0.0
-BELLA COMERCIAL,forma_envio,47,0,0.0
-BELLA COMERCIAL,id_nota_fiscal,47,0,0.0
-BELLA COMERCIAL,total_produtos,47,0,0.0
-BELLA COMERCIAL,total_pedido,47,0,0.0
-BALAO DE OFERTAS,cliente,223,0,0.0
-BALAO DE OFERTAS,cpf_cnpj_cliente,223,0,0.0
-BALAO DE OFERTAS,cidade,223,0,0.0
-BALAO DE OFERTAS,uf,223,0,0.0
-BALAO DE OFERTAS,canal,223,0,0.0
-BALAO DE OFERTAS,ecommerce_nome,223,0,0.0
-BALAO DE OFERTAS,forma_envio,223,0,0.0
-BALAO DE OFERTAS,id_nota_fiscal,223,0,0.0
-BALAO DE OFERTAS,total_produtos,223,0,0.0
-BALAO DE OFERTAS,total_pedido,223,0,0.0
-NOTA STORE,cliente,229,0,0.0
-NOTA STORE,cpf_cnpj_cliente,229,0,0.0
-NOTA STORE,cidade,229,0,0.0
-NOTA STORE,uf,229,0,0.0
-NOTA STORE,canal,229,0,0.0
-NOTA STORE,ecommerce_nome,229,0,0.0
-NOTA STORE,forma_envio,229,0,0.0
-NOTA STORE,id_nota_fiscal,229,0,0.0
-NOTA STORE,total_produtos,229,0,0.0
-NOTA STORE,total_pedido,229,0,0.0
+BELLA COMERCIAL,cliente,49,0,0.0
+BELLA COMERCIAL,cpf_cnpj_cliente,49,0,0.0
+BELLA COMERCIAL,cidade,49,0,0.0
+BELLA COMERCIAL,uf,49,0,0.0
+BELLA COMERCIAL,canal,49,0,0.0
+BELLA COMERCIAL,ecommerce_nome,49,0,0.0
+BELLA COMERCIAL,forma_envio,49,0,0.0
+BELLA COMERCIAL,id_nota_fiscal,49,0,0.0
+BELLA COMERCIAL,total_produtos,49,0,0.0
+BELLA COMERCIAL,total_pedido,49,0,0.0
+BALAO DE OFERTAS,cliente,239,0,0.0
+BALAO DE OFERTAS,cpf_cnpj_cliente,239,0,0.0
+BALAO DE OFERTAS,cidade,239,0,0.0
+BALAO DE OFERTAS,uf,239,0,0.0
+BALAO DE OFERTAS,canal,239,0,0.0
+BALAO DE OFERTAS,ecommerce_nome,239,0,0.0
+BALAO DE OFERTAS,forma_envio,239,0,0.0
+BALAO DE OFERTAS,id_nota_fiscal,239,0,0.0
+BALAO DE OFERTAS,total_produtos,239,0,0.0
+BALAO DE OFERTAS,total_pedido,239,0,0.0
+NOTA STORE,cliente,241,0,0.0
+NOTA STORE,cpf_cnpj_cliente,241,0,0.0
+NOTA STORE,cidade,241,0,0.0
+NOTA STORE,uf,241,0,0.0
+NOTA STORE,canal,241,0,0.0
+NOTA STORE,ecommerce_nome,241,0,0.0
+NOTA STORE,forma_envio,241,0,0.0
+NOTA STORE,id_nota_fiscal,241,0,0.0
+NOTA STORE,total_produtos,241,0,0.0
+NOTA STORE,total_pedido,241,0,0.0
 AF ESTOFADOS,cliente,3,0,0.0
 AF ESTOFADOS,cpf_cnpj_cliente,3,0,0.0
 AF ESTOFADOS,cidade,3,0,0.0
@@ -159,23 +159,23 @@ AF ESTOFADOS,forma_envio,3,0,0.0
 AF ESTOFADOS,id_nota_fiscal,3,0,0.0
 AF ESTOFADOS,total_produtos,3,0,0.0
 AF ESTOFADOS,total_pedido,3,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cliente,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cpf_cnpj_cliente,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,cidade,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,uf,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,canal,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,ecommerce_nome,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,forma_envio,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,id_nota_fiscal,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,total_produtos,41,0,0.0
-CAJON MARCOS BRANDÃO LTDA,total_pedido,41,0,0.0
-SHALOM,cliente,131,0,0.0
-SHALOM,cpf_cnpj_cliente,131,0,0.0
-SHALOM,cidade,131,0,0.0
-SHALOM,uf,131,0,0.0
-SHALOM,canal,131,0,0.0
-SHALOM,ecommerce_nome,131,0,0.0
-SHALOM,forma_envio,131,0,0.0
-SHALOM,id_nota_fiscal,131,0,0.0
-SHALOM,total_produtos,131,0,0.0
-SHALOM,total_pedido,131,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cliente,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cpf_cnpj_cliente,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,cidade,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,uf,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,canal,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,ecommerce_nome,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,forma_envio,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,id_nota_fiscal,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,total_produtos,42,0,0.0
+CAJON MARCOS BRANDÃO LTDA,total_pedido,42,0,0.0
+SHALOM,cliente,139,0,0.0
+SHALOM,cpf_cnpj_cliente,139,0,0.0
+SHALOM,cidade,139,0,0.0
+SHALOM,uf,139,0,0.0
+SHALOM,canal,139,0,0.0
+SHALOM,ecommerce_nome,139,0,0.0
+SHALOM,forma_envio,139,0,0.0
+SHALOM,id_nota_fiscal,139,0,0.0
+SHALOM,total_produtos,139,0,0.0
+SHALOM,total_pedido,139,0,0.0
