@@ -17,73 +17,21 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.block-container { padding-top: 1.4rem; }
+.block-container { padding-top: 1.5rem; }
 .big-title { font-size: 34px; font-weight: 800; line-height: 1.1; }
-.sub-title { color: #8A94A6; font-size: 18px; margin-top: 6px; }
-.pill {
-    display: inline-block;
-    padding: 8px 14px;
-    border: 1px solid #E5E7EB;
-    border-radius: 22px;
-    margin-right: 8px;
-    font-weight: 500;
-}
-.kpi-card {
-    padding: 22px;
-    border: 1px solid #E5E7EB;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.03);
-}
-.kpi-title { color: #6B7280; font-size: 17px; }
-.kpi-value { font-size: 34px; font-weight: 700; margin-top: 8px; }
-.green { color: #00C853; font-weight: 700; }
-.red { color: #FF3B30; font-weight: 700; }
+.sub-title { color: #9CA3AF; font-size: 18px; margin-top: 6px; }
 </style>
 """, unsafe_allow_html=True)
 
-
 def moeda(valor):
-    try:
-        return f"R$ {float(valor):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    except Exception:
-        return "R$ 0,00"
-
+    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 def numero(valor):
-    try:
-        return f"{float(valor):,.0f}".replace(",", ".")
-    except Exception:
-        return "0"
-
-
-def percentual(valor):
-    try:
-        return f"{float(valor) * 100:,.2f}%".replace(",", "X").replace(".", ",").replace("X", ".")
-    except Exception:
-        return "0,00%"
-
-
-def formatar_tabela(df):
-    df = df.copy()
-
-    for col in df.columns:
-        col_lower = col.lower()
-
-        if any(x in col_lower for x in ["faturamento", "ticket", "valor", "total"]):
-            if pd.api.types.is_numeric_dtype(df[col]):
-                df[col] = df[col].apply(moeda)
-
-        if any(x in col_lower for x in ["participacao", "percentual", "share", "crescimento"]):
-            if pd.api.types.is_numeric_dtype(df[col]):
-                df[col] = df[col].apply(percentual)
-
-    return df
-
+    return f"{valor:,.0f}".replace(",", ".")
 
 @st.cache_data
 def carregar_csv(nome):
     return pd.read_csv(DATA_DIR / nome)
-
 
 pedidos = carregar_csv("pedidos.csv")
 itens = carregar_csv("itens_pedido.csv")
@@ -103,10 +51,6 @@ pedidos["data_pedido_dt"] = pd.to_datetime(
     format="%d/%m/%Y",
     errors="coerce"
 )
-
-# =========================
-# CABEÇALHO
-# =========================
 
 col_logo, col_titulo = st.columns([1, 6])
 
@@ -128,26 +72,40 @@ with col_titulo:
 
 st.caption("Inteligência comercial multiempresa integrada ao Tiny ERP")
 
-# =========================
-# FILTROS
-# =========================
-
 st.sidebar.title("Filtros")
 
 assessores = sorted(pedidos["assessor"].dropna().unique())
-assessores_filtro = st.sidebar.multiselect("Assessor", assessores, default=assessores)
-
-empresas_disponiveis = sorted(
-    pedidos[pedidos["assessor"].isin(assessores_filtro)]["empresa"].dropna().unique()
-)
-
-empresas_filtro = st.sidebar.multiselect("Empresas", empresas_disponiveis, default=empresas_disponiveis)
-
+empresas = sorted(pedidos["empresa"].dropna().unique())
 canais = sorted(pedidos["canal"].dropna().unique())
 ufs = sorted(pedidos["uf"].dropna().unique())
 
-canais_filtro = st.sidebar.multiselect("Canais", canais, default=canais)
-ufs_filtro = st.sidebar.multiselect("UF", ufs, default=ufs)
+assessores_filtro = st.sidebar.multiselect(
+    "Assessor",
+    assessores,
+    default=assessores
+)
+
+empresas_filtradas_por_assessor = sorted(
+    pedidos[pedidos["assessor"].isin(assessores_filtro)]["empresa"].dropna().unique()
+)
+
+empresas_filtro = st.sidebar.multiselect(
+    "Empresas",
+    empresas_filtradas_por_assessor,
+    default=empresas_filtradas_por_assessor
+)
+
+canais_filtro = st.sidebar.multiselect(
+    "Canais",
+    canais,
+    default=canais
+)
+
+ufs_filtro = st.sidebar.multiselect(
+    "UF",
+    ufs,
+    default=ufs
+)
 
 base_pedidos = pedidos[
     pedidos["assessor"].isin(assessores_filtro)
@@ -157,48 +115,30 @@ base_pedidos = pedidos[
 ].copy()
 
 ids_pedidos = base_pedidos["id_pedido"].astype(str).unique()
-base_itens = itens[itens["id_pedido"].astype(str).isin(ids_pedidos)].copy()
 
-# =========================
-# TOP BAR
-# =========================
-
-st.markdown(
-    '<span class="pill">📅 mês atual</span>'
-    '<span class="pill">🔎 filtros ativos</span>'
-    '<span class="pill">↻ atualizado agora</span>',
-    unsafe_allow_html=True
-)
-
-st.divider()
-
-# =========================
-# KPIs
-# =========================
+base_itens = itens[
+    itens["id_pedido"].astype(str).isin(ids_pedidos)
+].copy()
 
 faturamento = base_pedidos["total_pedido"].sum()
 qtd_pedidos = base_pedidos["id_pedido"].nunique()
 ticket_medio = base_pedidos["total_pedido"].mean() if qtd_pedidos else 0
 clientes = base_pedidos["cpf_cnpj_cliente"].nunique()
 itens_vendidos = base_itens["quantidade"].sum()
-nf_emitidas = base_pedidos["id_nota_fiscal"].astype(str).str.strip().ne("").sum() if "id_nota_fiscal" in base_pedidos.columns else 0
 
-k1, k2, k3, k4, k5 = st.columns(5)
+st.divider()
 
-k1.metric("Faturamento", moeda(faturamento))
-k2.metric("Pedidos", numero(qtd_pedidos))
-k3.metric("Ticket médio", moeda(ticket_medio))
-k4.metric("Clientes", numero(clientes))
-k5.metric("Itens vendidos", numero(itens_vendidos))
+c1, c2, c3, c4, c5 = st.columns(5)
+c1.metric("Faturamento", moeda(faturamento))
+c2.metric("Pedidos", numero(qtd_pedidos))
+c3.metric("Ticket médio", moeda(ticket_medio))
+c4.metric("Clientes", numero(clientes))
+c5.metric("Itens vendidos", numero(itens_vendidos))
 
 st.caption(f"Última atualização visual: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
-# =========================
-# ABAS
-# =========================
-
-aba_vendas, aba_assessor, aba_empresas, aba_produtos, aba_clientes, aba_alertas, aba_dados = st.tabs([
-    "📌 Vendas",
+aba_exec, aba_assessor, aba_emp, aba_prod, aba_cli, aba_alertas, aba_dados = st.tabs([
+    "📌 Executivo",
     "🧑‍💼 Assessores",
     "🏢 Empresas",
     "📦 Produtos",
@@ -207,61 +147,27 @@ aba_vendas, aba_assessor, aba_empresas, aba_produtos, aba_clientes, aba_alertas,
     "🧾 Dados"
 ])
 
-# =========================
-# VENDAS
-# =========================
-
-with aba_vendas:
-    c1, c2 = st.columns(2)
-
+with aba_exec:
     vendas_dia = (
         base_pedidos
         .dropna(subset=["data_pedido_dt"])
         .groupby("data_pedido_dt", as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique"),
-            ticket_medio=("total_pedido", "mean")
+            pedidos=("id_pedido", "nunique")
         )
         .sort_values("data_pedido_dt")
     )
 
-    fig_vendas = px.area(
+    fig_dia = px.line(
         vendas_dia,
         x="data_pedido_dt",
         y="faturamento",
-        title="Total das vendas"
+        markers=True,
+        title="Evolução diária do faturamento"
     )
-    c1.plotly_chart(fig_vendas, width="stretch")
 
-    fig_ticket = px.area(
-        vendas_dia,
-        x="data_pedido_dt",
-        y="ticket_medio",
-        title="Ticket médio"
-    )
-    c2.plotly_chart(fig_ticket, width="stretch")
-
-    st.subheader("Visão geral")
-
-    v1, v2, v3, v4, v5, v6 = st.columns(6)
-
-    canal_alta = "N/A"
-    if not base_pedidos.empty:
-        canal_alta = (
-            base_pedidos
-            .groupby("canal")["total_pedido"]
-            .sum()
-            .sort_values(ascending=False)
-            .index[0]
-        )
-
-    v1.metric("Pedidos", numero(qtd_pedidos))
-    v2.metric("Vendas e-commerce", numero(qtd_pedidos))
-    v3.metric("Vendas físicas", "0")
-    v4.metric("Valor total", moeda(faturamento))
-    v5.metric("NF-e emitidas", numero(nf_emitidas))
-    v6.metric("Canal em alta", canal_alta)
+    st.plotly_chart(fig_dia, width="stretch")
 
     col1, col2 = st.columns(2)
 
@@ -275,31 +181,24 @@ with aba_vendas:
         .sort_values("faturamento", ascending=False)
     )
 
-    total_canal = resumo_canal["faturamento"].sum()
-    resumo_canal["participacao"] = resumo_canal["faturamento"] / total_canal if total_canal else 0
-
     fig_canal = px.pie(
         resumo_canal,
         names="canal",
         values="faturamento",
         title="Share de faturamento por canal"
     )
+
     col1.plotly_chart(fig_canal, width="stretch")
-    col1.dataframe(formatar_tabela(resumo_canal), width="stretch")
 
     resumo_uf = (
         base_pedidos
         .groupby("uf", as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique"),
-            ticket_medio=("total_pedido", "mean")
+            pedidos=("id_pedido", "nunique")
         )
         .sort_values("faturamento", ascending=False)
     )
-
-    total_uf = resumo_uf["faturamento"].sum()
-    resumo_uf["participacao"] = resumo_uf["faturamento"] / total_uf if total_uf else 0
 
     fig_uf = px.bar(
         resumo_uf.head(15),
@@ -308,14 +207,12 @@ with aba_vendas:
         title="Top UFs por faturamento",
         text_auto=".2s"
     )
-    col2.plotly_chart(fig_uf, width="stretch")
-    col2.dataframe(formatar_tabela(resumo_uf), width="stretch")
 
-# =========================
-# ASSESSORES
-# =========================
+    col2.plotly_chart(fig_uf, width="stretch")
 
 with aba_assessor:
+    st.subheader("Desempenho por Assessor")
+
     ranking_assessor = (
         base_pedidos
         .groupby("assessor", as_index=False)
@@ -330,18 +227,24 @@ with aba_assessor:
     )
 
     total_assessor = ranking_assessor["faturamento"].sum()
-    ranking_assessor["participacao"] = ranking_assessor["faturamento"] / total_assessor if total_assessor else 0
+
+    if total_assessor:
+        ranking_assessor["participacao"] = ranking_assessor["faturamento"] / total_assessor
+    else:
+        ranking_assessor["participacao"] = 0
 
     fig_assessor = px.bar(
         ranking_assessor,
         x="assessor",
         y="faturamento",
-        title="Faturamento por assessor",
+        title="Faturamento por Assessor",
         text_auto=".2s"
     )
 
     st.plotly_chart(fig_assessor, width="stretch")
-    st.dataframe(formatar_tabela(ranking_assessor), width="stretch")
+    st.dataframe(ranking_assessor, width="stretch")
+
+    st.subheader("Carteira por Assessor")
 
     carteira = (
         pedidos
@@ -353,17 +256,9 @@ with aba_assessor:
         .sort_values(["assessor", "faturamento"], ascending=[True, False])
     )
 
-    total_carteira = carteira.groupby("assessor")["faturamento"].transform("sum")
-    carteira["participacao"] = carteira["faturamento"] / total_carteira
+    st.dataframe(carteira, width="stretch")
 
-    st.subheader("Carteira por assessor")
-    st.dataframe(formatar_tabela(carteira), width="stretch")
-
-# =========================
-# EMPRESAS
-# =========================
-
-with aba_empresas:
+with aba_emp:
     ranking_empresas = (
         base_pedidos
         .groupby(["assessor", "empresa"], as_index=False)
@@ -377,9 +272,13 @@ with aba_empresas:
     )
 
     total_empresas = ranking_empresas["faturamento"].sum()
-    ranking_empresas["participacao"] = ranking_empresas["faturamento"] / total_empresas if total_empresas else 0
 
-    fig_empresas = px.bar(
+    if total_empresas:
+        ranking_empresas["participacao"] = ranking_empresas["faturamento"] / total_empresas
+    else:
+        ranking_empresas["participacao"] = 0
+
+    fig_emp = px.bar(
         ranking_empresas,
         x="empresa",
         y="faturamento",
@@ -388,14 +287,10 @@ with aba_empresas:
         text_auto=".2s"
     )
 
-    st.plotly_chart(fig_empresas, width="stretch")
-    st.dataframe(formatar_tabela(ranking_empresas), width="stretch")
+    st.plotly_chart(fig_emp, width="stretch")
+    st.dataframe(ranking_empresas, width="stretch")
 
-# =========================
-# PRODUTOS
-# =========================
-
-with aba_produtos:
+with aba_prod:
     top_produtos = (
         base_itens
         .groupby(["codigo_produto", "descricao_produto"], as_index=False)
@@ -462,15 +357,11 @@ with aba_produtos:
         )
 
         st.plotly_chart(fig_abc, width="stretch")
-        st.dataframe(formatar_tabela(abc), width="stretch")
+        st.dataframe(abc, width="stretch")
     else:
         st.info("Sem dados suficientes para Curva ABC.")
 
-# =========================
-# CLIENTES
-# =========================
-
-with aba_clientes:
+with aba_cli:
     top_clientes = (
         base_pedidos
         .groupby(["assessor", "cliente", "cpf_cnpj_cliente", "cidade", "uf"], as_index=False)
@@ -485,22 +376,26 @@ with aba_clientes:
     recorrentes = top_clientes[top_clientes["pedidos"] >= 2].copy()
 
     col1, col2 = st.columns(2)
+
     col1.metric("Clientes recorrentes", numero(len(recorrentes)))
 
-    perc_recorrentes = len(recorrentes) / len(top_clientes) if len(top_clientes) else 0
-    col2.metric("% recorrentes", percentual(perc_recorrentes))
+    percentual_recorrentes = (
+        len(recorrentes) / len(top_clientes) * 100
+        if len(top_clientes)
+        else 0
+    )
+
+    col2.metric("% recorrentes", f"{percentual_recorrentes:.2f}%")
 
     st.subheader("Top clientes")
-    st.dataframe(formatar_tabela(top_clientes.head(200)), width="stretch")
+    st.dataframe(top_clientes.head(200), width="stretch")
 
     st.subheader("Clientes recorrentes")
-    st.dataframe(formatar_tabela(recorrentes), width="stretch")
-
-# =========================
-# ALERTAS
-# =========================
+    st.dataframe(recorrentes, width="stretch")
 
 with aba_alertas:
+    st.subheader("Alertas inteligentes")
+
     alertas = []
 
     if "Não identificado" in base_pedidos["canal"].astype(str).unique():
@@ -525,6 +420,16 @@ with aba_alertas:
     if len(sem_uf) > 0:
         alertas.append(f"⚠️ Existem {len(sem_uf)} pedidos sem UF.")
 
+    if ticket_medio > 0:
+        baixo_ticket = base_pedidos[
+            base_pedidos["total_pedido"] < ticket_medio * 0.3
+        ]
+
+        if len(baixo_ticket) > 0:
+            alertas.append(
+                f"ℹ️ {len(baixo_ticket)} pedidos estão muito abaixo do ticket médio."
+            )
+
     baixo_giro = (
         base_itens
         .groupby(["codigo_produto", "descricao_produto"], as_index=False)
@@ -540,7 +445,9 @@ with aba_alertas:
     ]
 
     if len(baixo_giro) > 0:
-        alertas.append(f"ℹ️ {len(baixo_giro)} produtos tiveram venda de apenas 1 unidade.")
+        alertas.append(
+            f"ℹ️ {len(baixo_giro)} produtos tiveram venda de apenas 1 unidade."
+        )
 
     if alertas:
         for alerta in alertas:
@@ -548,13 +455,9 @@ with aba_alertas:
     else:
         st.success("Nenhum alerta crítico encontrado nos filtros atuais.")
 
-# =========================
-# DADOS
-# =========================
-
 with aba_dados:
     st.subheader("Base de pedidos")
-    st.dataframe(formatar_tabela(base_pedidos.head(1000)), width="stretch")
+    st.dataframe(base_pedidos.head(1000), width="stretch")
 
     st.subheader("Base de itens")
-    st.dataframe(formatar_tabela(base_itens.head(1000)), width="stretch")
+    st.dataframe(base_itens.head(1000), width="stretch")
