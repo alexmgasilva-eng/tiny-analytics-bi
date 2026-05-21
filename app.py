@@ -252,16 +252,17 @@ base_itens = itens[
 
 if not metas.empty:
 
-    base_metas = metas[
-        metas["assessor"].isin(assessores_filtro)
-        &
-        metas["empresa"].isin(empresas_filtro)
-    ].copy()
+    base_metas = metas.copy()
+
+    if "assessor" in base_metas.columns:
+
+        base_metas = base_metas[
+            base_metas["assessor"].isin(assessores_filtro)
+        ]
 
 else:
 
     base_metas = pd.DataFrame()
-
 # =====================================================
 # TOP BAR
 # =====================================================
