@@ -606,4 +606,10 @@ with aba_dados:
     st.dataframe(base.head(1000), width="stretch")
 
     st.subheader("Cadastro de clientes")
-    st.dataframe(clientes, width="stretch")
+
+clientes_view = clientes.drop(
+    columns=["CNPJ", "CHAVE API TINY"],
+    errors="ignore"
+)
+
+st.dataframe(clientes_view, width="stretch")
