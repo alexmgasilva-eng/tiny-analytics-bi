@@ -15,11 +15,7 @@ LOCAL_CONFIG_DIR = ROOT_DIR / "config"
 LOGO_PATH = BASE_DIR / "logo.png"
 
 
-st.set_page_config(
-    page_title="E-Factor BI",
-    page_icon="📊",
-    layout="wide"
-)
+st.set_page_config(page_title="E-Factor BI", page_icon="📊", layout="wide")
 
 
 st.markdown("""
@@ -33,6 +29,7 @@ st.markdown("""
     border-radius:22px;
     border:1px solid rgba(255,255,255,0.15);
     margin-right:10px;
+    margin-bottom:8px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -44,35 +41,27 @@ def caminho_arquivo(nome):
         LOCAL_CONFIG_DIR / nome,
         DATA_DIR / nome,
     ]
-
     for caminho in opcoes:
         if caminho.exists():
             return caminho
-
     return DATA_DIR / nome
 
 
 def normalizar(texto):
     if pd.isna(texto):
         return ""
-
     texto = str(texto).upper().strip()
     texto = unicodedata.normalize("NFD", texto)
     texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
-    texto = " ".join(texto.split())
-
-    return texto
+    return " ".join(texto.split())
 
 
 def moeda_para_float(valor):
     if pd.isna(valor):
         return 0.0
-
     valor = str(valor).replace("R$", "").replace(" ", "").strip()
-
     if "," in valor:
         valor = valor.replace(".", "").replace(",", ".")
-
     try:
         return float(valor)
     except Exception:
@@ -115,21 +104,20 @@ def carregar_pedidos():
     df["ano"] = df["data_pedido_dt"].dt.year
     df["mes"] = df["data_pedido_dt"].dt.month
 
-    df["total_pedido"] = pd.to_numeric(
-        df["total_pedido"],
-        errors="coerce"
-    ).fillna(0)
+    df["total_pedido"] = pd.to_numeric(df["total_pedido"], errors="coerce").fillna(0)
 
     if "tipo_venda" not in df.columns:
         df["tipo_venda"] = "DIGITAL"
 
     if "canal_padronizado" not in df.columns:
-        df["canal_padronizado"] = "Marketplace Não Identificado"
+        df["canal_padronizado"] = "Não identificado"
+
+    if "canal_estrategico" not in df.columns:
+        df["canal_estrategico"] = df["canal_padronizado"]
 
     df["tipo_venda"] = df["tipo_venda"].astype(str).str.upper().str.strip()
-    df["canal_padronizado"] = df["canal_padronizado"].fillna("Marketplace Não Identificado")
-
-    df = df[df["tipo_venda"] == "DIGITAL"].copy()
+    df["canal_padronizado"] = df["canal_padronizado"].fillna("Não identificado").astype(str).str.strip()
+    df["canal_estrategico"] = df["canal_estrategico"].fillna("Não Identificado").astype(str).str.strip()
 
     return df
 
@@ -153,18 +141,9 @@ def carregar_clientes():
             df[col] = 0.0
 
     meses = {
-        1: "JANEIRO",
-        2: "FEVEREIRO",
-        3: "MARÇO",
-        4: "ABRIL",
-        5: "MAIO",
-        6: "JUNHO",
-        7: "JULHO",
-        8: "AGOSTO",
-        9: "SETEMBRO",
-        10: "OUTUBRO",
-        11: "NOVEMBRO",
-        12: "DEZEMBRO",
+        1: "JANEIRO", 2: "FEVEREIRO", 3: "MARÇO", 4: "ABRIL",
+        5: "MAIO", 6: "JUNHO", 7: "JULHO", 8: "AGOSTO",
+        9: "SETEMBRO", 10: "OUTUBRO", 11: "NOVEMBRO", 12: "DEZEMBRO",
     }
 
     for mes_num, mes_nome in meses.items():
@@ -187,14 +166,8 @@ with col_logo:
         st.image(str(LOGO_PATH), width=120)
 
 with col_titulo:
-    st.markdown(
-        '<div class="big-title">e-Factor Consultoria e Assessoria</div>',
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        '<div class="sub-title">Painel Executivo MIOS — Operação Digital</div>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<div class="big-title">e-Factor Consultoria e Assessoria</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-title">Painel Executivo MIOS</div>', unsafe_allow_html=True)
 
 st.caption("Inteligência comercial multiempresa integrada ao Tiny ERP")
 
@@ -204,7 +177,7 @@ st.sidebar.title("Filtros")
 anos = sorted(pedidos["ano"].dropna().astype(int).unique())
 
 if not anos:
-    st.error("Nenhum pedido digital encontrado na base.")
+    st.error("Nenhum pedido encontrado na base.")
     st.stop()
 
 ano_filtro = st.sidebar.selectbox("Ano", anos, index=len(anos) - 1)
@@ -215,35 +188,34 @@ meses_disponiveis = sorted(
 
 opcoes_meses = ["Todos"] + meses_disponiveis
 
-mes_filtro = st.sidebar.selectbox(
-    "Mês",
-    opcoes_meses,
-    index=len(opcoes_meses) - 1
+mes_filtro = st.sidebar.selectbox("Mês", opcoes_meses, index=len(opcoes_meses) - 1)
+
+tipos_venda = sorted(pedidos["tipo_venda"].dropna().unique())
+opcoes_tipo_venda = ["Todos"] + tipos_venda
+tipo_venda_default = "DIGITAL" if "DIGITAL" in opcoes_tipo_venda else "Todos"
+
+tipo_venda_filtro = st.sidebar.selectbox(
+    "Tipo de venda",
+    opcoes_tipo_venda,
+    index=opcoes_tipo_venda.index(tipo_venda_default)
 )
+
+base_tipo = pedidos.copy()
+
+if tipo_venda_filtro != "Todos":
+    base_tipo = base_tipo[base_tipo["tipo_venda"] == tipo_venda_filtro].copy()
+
+canais = sorted(base_tipo["canal_estrategico"].dropna().unique())
+
+canais_filtro = st.sidebar.multiselect("Canal estratégico", canais, default=canais)
 
 assessores = sorted(clientes["ASSESSOR"].dropna().unique())
 
-assessores_filtro = st.sidebar.multiselect(
-    "Assessores",
-    assessores,
-    default=assessores
-)
+assessores_filtro = st.sidebar.multiselect("Assessores", assessores, default=assessores)
 
 status_clientes = sorted(clientes["STATUS"].dropna().unique())
 
-status_filtro = st.sidebar.multiselect(
-    "Status cliente",
-    status_clientes,
-    default=status_clientes
-)
-
-canais = sorted(pedidos["canal_padronizado"].dropna().unique())
-
-canais_filtro = st.sidebar.multiselect(
-    "Canal digital",
-    canais,
-    default=canais
-)
+status_filtro = st.sidebar.multiselect("Status cliente", status_clientes, default=status_clientes)
 
 clientes_filtrados = clientes[
     clientes["ASSESSOR"].isin(assessores_filtro)
@@ -252,11 +224,7 @@ clientes_filtrados = clientes[
 
 empresas_disponiveis = sorted(clientes_filtrados["EMPRESA"].dropna().unique())
 
-empresas_filtro = st.sidebar.multiselect(
-    "Empresas",
-    empresas_disponiveis,
-    default=empresas_disponiveis
-)
+empresas_filtro = st.sidebar.multiselect("Empresas", empresas_disponiveis, default=empresas_disponiveis)
 
 empresas_norm_filtro = clientes_filtrados[
     clientes_filtrados["EMPRESA"].isin(empresas_filtro)
@@ -268,56 +236,39 @@ base = pedidos[pedidos["ano"] == ano_filtro].copy()
 if mes_filtro != "Todos":
     base = base[base["mes"] == int(mes_filtro)].copy()
 
+if tipo_venda_filtro != "Todos":
+    base = base[base["tipo_venda"] == tipo_venda_filtro].copy()
+
 base = base[
     base["empresa_normalizada"].isin(empresas_norm_filtro)
-    & base["canal_padronizado"].isin(canais_filtro)
+    & base["canal_estrategico"].isin(canais_filtro)
 ].copy()
 
 base = base.merge(
     clientes[[
-        "empresa_normalizada",
-        "EMPRESA",
-        "ASSESSOR",
-        "STATUS",
-        "CONTRATO",
-        "COMISSÃO",
-        "meta_1",
-        "meta_2",
-        "meta_3",
-        "meta_4",
-        "meta_5",
-        "meta_6",
-        "meta_7",
-        "meta_8",
-        "meta_9",
-        "meta_10",
-        "meta_11",
-        "meta_12",
+        "empresa_normalizada", "EMPRESA", "ASSESSOR", "STATUS",
+        "CONTRATO", "COMISSÃO",
+        "meta_1", "meta_2", "meta_3", "meta_4", "meta_5", "meta_6",
+        "meta_7", "meta_8", "meta_9", "meta_10", "meta_11", "meta_12",
     ]],
     on="empresa_normalizada",
     how="left"
 )
 
 if mes_filtro == "Todos":
-    metas_ref = clientes_filtrados[
-        clientes_filtrados["EMPRESA"].isin(empresas_filtro)
-    ].copy()
-
+    metas_ref = clientes_filtrados[clientes_filtrados["EMPRESA"].isin(empresas_filtro)].copy()
     colunas_meta = [f"meta_{m}" for m in meses_disponiveis]
     metas_ref["meta_periodo"] = metas_ref[colunas_meta].sum(axis=1)
 else:
-    metas_ref = clientes_filtrados[
-        clientes_filtrados["EMPRESA"].isin(empresas_filtro)
-    ].copy()
-
+    metas_ref = clientes_filtrados[clientes_filtrados["EMPRESA"].isin(empresas_filtro)].copy()
     metas_ref["meta_periodo"] = metas_ref[f"meta_{int(mes_filtro)}"]
 
 
 st.markdown(
-    '<span class="pill">🛒 operação digital</span>'
-    '<span class="pill">📅 período filtrado</span>'
-    '<span class="pill">🔎 filtros ativos</span>'
-    '<span class="pill">↻ atualizado agora</span>',
+    f'<span class="pill">🛒 Tipo: {tipo_venda_filtro}</span>'
+    f'<span class="pill">📅 Ano: {ano_filtro}</span>'
+    f'<span class="pill">🗓️ Mês: {mes_filtro}</span>'
+    f'<span class="pill">🔎 Canais estratégicos: {len(canais_filtro)}</span>',
     unsafe_allow_html=True
 )
 
@@ -336,10 +287,10 @@ percentual_meta = faturamento / meta_total if meta_total > 0 else 0
 
 k1, k2, k3, k4, k5 = st.columns(5)
 
-k1.metric("Faturamento Digital", moeda(faturamento))
-k2.metric("Meta Digital", moeda(meta_total))
+k1.metric("Faturamento", moeda(faturamento))
+k2.metric("Meta", moeda(meta_total))
 k3.metric("% Meta", percentual(percentual_meta))
-k4.metric("Pedidos Digitais", numero(pedidos_qtd))
+k4.metric("Pedidos", numero(pedidos_qtd))
 k5.metric("Clientes", numero(clientes_qtd))
 
 st.caption(f"Atualizado em {datetime.now().strftime('%d/%m/%Y %H:%M')}")
@@ -361,33 +312,24 @@ with aba_vendas:
     vendas_dia = (
         base.dropna(subset=["data_pedido_dt"])
         .groupby("data_pedido_dt", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique")
-        )
+        .agg(faturamento=("total_pedido", "sum"), pedidos=("id_pedido", "nunique"))
         .sort_values("data_pedido_dt")
     )
 
-    fig = px.area(
-        vendas_dia,
-        x="data_pedido_dt",
-        y="faturamento",
-        title="Faturamento digital diário"
-    )
-
+    fig = px.area(vendas_dia, x="data_pedido_dt", y="faturamento", title="Faturamento diário")
     st.plotly_chart(fig, width="stretch")
 
     resumo_canal = (
-        base.groupby("canal_padronizado", as_index=False)
+        base.groupby("canal_estrategico", as_index=False)
         .agg(faturamento=("total_pedido", "sum"))
         .sort_values("faturamento", ascending=False)
     )
 
     fig_canal = px.pie(
         resumo_canal,
-        names="canal_padronizado",
+        names="canal_estrategico",
         values="faturamento",
-        title="Share por canal digital"
+        title="Share por canal estratégico"
     )
 
     st.plotly_chart(fig_canal, width="stretch")
@@ -396,17 +338,10 @@ with aba_vendas:
 with aba_metas:
     realizado = (
         base.groupby("empresa_normalizada", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique")
-        )
+        .agg(faturamento=("total_pedido", "sum"), pedidos=("id_pedido", "nunique"))
     )
 
-    metas_view = metas_ref.merge(
-        realizado,
-        on="empresa_normalizada",
-        how="left"
-    )
+    metas_view = metas_ref.merge(realizado, on="empresa_normalizada", how="left")
 
     metas_view["faturamento"] = metas_view["faturamento"].fillna(0)
     metas_view["pedidos"] = metas_view["pedidos"].fillna(0)
@@ -432,21 +367,14 @@ with aba_metas:
         x="EMPRESA",
         y="percentual_meta",
         color="ASSESSOR",
-        title="Atingimento de meta digital"
+        title="Atingimento de meta"
     )
 
     st.plotly_chart(fig_meta, width="stretch")
 
     tabela = metas_view[[
-        "ASSESSOR",
-        "STATUS",
-        "EMPRESA",
-        "meta_periodo",
-        "faturamento",
-        "percentual_meta",
-        "gap",
-        "pedidos",
-        "status_meta"
+        "ASSESSOR", "STATUS", "EMPRESA", "meta_periodo", "faturamento",
+        "percentual_meta", "gap", "pedidos", "status_meta"
     ]].copy()
 
     tabela["meta_periodo"] = tabela["meta_periodo"].apply(moeda)
@@ -458,14 +386,11 @@ with aba_metas:
 
 
 with aba_canais:
-    st.subheader("Performance por canal digital")
+    st.subheader("Performance por canal estratégico")
 
     canais_view = (
-        base.groupby("canal_padronizado", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique")
-        )
+        base.groupby("canal_estrategico", as_index=False)
+        .agg(faturamento=("total_pedido", "sum"), pedidos=("id_pedido", "nunique"))
         .sort_values("faturamento", ascending=False)
     )
 
@@ -474,9 +399,9 @@ with aba_canais:
 
     fig_canais = px.bar(
         canais_view,
-        x="canal_padronizado",
+        x="canal_estrategico",
         y="faturamento",
-        title="Ranking de canais digitais",
+        title="Ranking de canais estratégicos",
         text_auto=".2s"
     )
 
@@ -500,8 +425,14 @@ with aba_temporal:
         temporal["ASSESSOR"].isin(assessores_filtro)
         & temporal["STATUS"].isin(status_filtro)
         & temporal["empresa_normalizada"].isin(empresas_norm_filtro)
-        & temporal["canal_padronizado"].isin(canais_filtro)
+        & temporal["canal_estrategico"].isin(canais_filtro)
     ].copy()
+
+    if mes_filtro != "Todos":
+        temporal = temporal[temporal["mes"] == int(mes_filtro)].copy()
+
+    if tipo_venda_filtro != "Todos":
+        temporal = temporal[temporal["tipo_venda"] == tipo_venda_filtro].copy()
 
     resumo = (
         temporal.groupby(["ano", "mes"], as_index=False)
@@ -520,7 +451,7 @@ with aba_temporal:
         x="mes_ano",
         y="faturamento",
         markers=True,
-        title="Evolução mensal digital"
+        title="Evolução mensal"
     )
 
     st.plotly_chart(fig_temporal, width="stretch")
@@ -532,21 +463,11 @@ with aba_temporal:
 with aba_assessores:
     ranking = (
         base.groupby("ASSESSOR", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique"),
-            empresas=("EMPRESA", "nunique")
-        )
+        .agg(faturamento=("total_pedido", "sum"), pedidos=("id_pedido", "nunique"), empresas=("EMPRESA", "nunique"))
         .sort_values("faturamento", ascending=False)
     )
 
-    fig_assessor = px.bar(
-        ranking,
-        x="ASSESSOR",
-        y="faturamento",
-        title="Faturamento digital por assessor"
-    )
-
+    fig_assessor = px.bar(ranking, x="ASSESSOR", y="faturamento", title="Faturamento por assessor")
     st.plotly_chart(fig_assessor, width="stretch")
 
     ranking["faturamento"] = ranking["faturamento"].apply(moeda)
@@ -556,10 +477,7 @@ with aba_assessores:
 with aba_clientes:
     clientes_view = (
         base.groupby(["ASSESSOR", "STATUS", "EMPRESA"], as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique")
-        )
+        .agg(faturamento=("total_pedido", "sum"), pedidos=("id_pedido", "nunique"))
         .sort_values("faturamento", ascending=False)
     )
 
@@ -574,13 +492,7 @@ with aba_financeiro:
     col2.metric("Comissão clientes", moeda(comissao_total))
     col3.metric("Clientes na carteira", numero(len(metas_ref)))
 
-    financeiro = metas_ref[[
-        "ASSESSOR",
-        "STATUS",
-        "EMPRESA",
-        "CONTRATO",
-        "COMISSÃO"
-    ]].copy()
+    financeiro = metas_ref[["ASSESSOR", "STATUS", "EMPRESA", "CONTRATO", "COMISSÃO"]].copy()
 
     financeiro["CONTRATO"] = financeiro["CONTRATO"].apply(moeda)
     financeiro["COMISSÃO"] = financeiro["COMISSÃO"].apply(moeda)
@@ -589,14 +501,11 @@ with aba_financeiro:
 
 
 with aba_dados:
-    st.subheader("Pedidos digitais filtrados")
+    st.subheader("Pedidos filtrados")
     st.dataframe(base.head(1000), width="stretch")
 
     st.subheader("Cadastro de clientes")
 
-    clientes_view = clientes.drop(
-        columns=["CNPJ", "CHAVE API TINY"],
-        errors="ignore"
-    )
+    clientes_view = clientes.drop(columns=["CNPJ", "CHAVE API TINY"], errors="ignore")
 
     st.dataframe(clientes_view, width="stretch")
