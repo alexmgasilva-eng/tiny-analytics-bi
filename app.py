@@ -1,73 +1,35 @@
 from pathlib import Path
 from datetime import datetime
-import unicodedata
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-
 BASE_DIR = Path(__file__).parent
-ROOT_DIR = BASE_DIR.parent
 DATA_DIR = BASE_DIR / "data"
-LOCAL_RAW_DIR = ROOT_DIR / "data" / "raw"
-LOCAL_CONFIG_DIR = ROOT_DIR / "config"
 LOGO_PATH = BASE_DIR / "logo.png"
-
 
 st.set_page_config(
     page_title="E-Factor BI",
-    page_icon="📊",
+    page_icon=str(LOGO_PATH) if LOGO_PATH.exists() else "📊",
     layout="wide"
 )
 
-
 st.markdown("""
 <style>
-.block-container { padding-top: 1rem; }
-.big-title { font-size: 38px; font-weight: 800; }
-.sub-title { font-size: 18px; color: #9CA3AF; margin-top: -10px; }
+.block-container { padding-top: 1.4rem; }
+.big-title { font-size: 34px; font-weight: 800; line-height: 1.1; }
+.sub-title { color: #8A94A6; font-size: 18px; margin-top: 6px; }
 .pill {
-    display:inline-block;
-    padding:8px 16px;
-    border-radius:22px;
-    border:1px solid rgba(255,255,255,0.15);
-    margin-right:10px;
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid #E5E7EB;
+    border-radius: 22px;
+    margin-right: 8px;
+    font-weight: 500;
 }
 </style>
 """, unsafe_allow_html=True)
-
-
-def caminho_arquivo(nome):
-    for caminho in [
-        LOCAL_RAW_DIR / nome,
-        LOCAL_CONFIG_DIR / nome,
-        DATA_DIR / nome,
-    ]:
-        if caminho.exists():
-            return caminho
-    return DATA_DIR / nome
-
-
-def normalizar(texto):
-    if pd.isna(texto):
-        return ""
-    texto = str(texto).upper().strip()
-    texto = unicodedata.normalize("NFD", texto)
-    texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
-    return " ".join(texto.split())
-
-
-def moeda_para_float(valor):
-    if pd.isna(valor):
-        return 0.0
-    valor = str(valor).replace("R$", "").replace(" ", "").strip()
-    if "," in valor:
-        valor = valor.replace(".", "").replace(",", ".")
-    try:
-        return float(valor)
-    except Exception:
-        return 0.0
 
 
 def moeda(valor):
@@ -91,96 +53,82 @@ def percentual(valor):
         return "0,00%"
 
 
-@st.cache_data
-def carregar_pedidos():
-    df = pd.read_csv(caminho_arquivo("pedidos_historico.csv"), low_memory=False)
+def formatar_tabela(df):
+    df = df.copy()
 
-    df["empresa_normalizada"] = df["empresa"].apply(normalizar)
+    for col in df.columns:
+        col_lower = col.lower()
 
-    df["data_pedido_dt"] = pd.to_datetime(
-        df["data_pedido"],
-        format="%d/%m/%Y",
-        errors="coerce"
-    )
+        if any(x in col_lower for x in ["faturamento", "ticket", "valor", "total", "meta", "realizado", "projecao", "gap", "ritmo"]):
+            if pd.api.types.is_numeric_dtype(df[col]):
+                df[col] = df[col].apply(moeda)
 
-    df["ano"] = df["data_pedido_dt"].dt.year
-    df["mes"] = df["data_pedido_dt"].dt.month
-
-    df["total_pedido"] = pd.to_numeric(
-        df["total_pedido"],
-        errors="coerce"
-    ).fillna(0)
-
-    if "tipo_venda" not in df.columns:
-        df["tipo_venda"] = "DIGITAL"
-
-    if "canal_padronizado" not in df.columns:
-        df["canal_padronizado"] = "Marketplace Não Identificado"
-
-    df["tipo_venda"] = df["tipo_venda"].astype(str).str.upper().str.strip()
-    df["canal_padronizado"] = df["canal_padronizado"].fillna("Marketplace Não Identificado")
-
-    # Regra oficial MIOS: operação analisada = venda digital
-    df = df[df["tipo_venda"] == "DIGITAL"].copy()
+        if any(x in col_lower for x in ["participacao", "percentual", "share", "crescimento"]):
+            if pd.api.types.is_numeric_dtype(df[col]):
+                df[col] = df[col].apply(percentual)
 
     return df
 
 
 @st.cache_data
-def carregar_clientes():
-    df = pd.read_csv(caminho_arquivo("clientes.csv"), sep=";", low_memory=False)
-
-    df.columns = df.columns.str.strip()
-    df = df.dropna(subset=["EMPRESA"]).copy()
-
-    df["EMPRESA"] = df["EMPRESA"].astype(str).str.strip()
-    df["ASSESSOR"] = df["ASSESSOR"].astype(str).str.strip().str.upper()
-    df["STATUS"] = df["STATUS"].astype(str).str.strip().str.upper()
-    df["empresa_normalizada"] = df["EMPRESA"].apply(normalizar)
-
-    for col in ["CONTRATO", "COMISSÃO"]:
-        if col in df.columns:
-            df[col] = df[col].apply(moeda_para_float)
-        else:
-            df[col] = 0.0
-
-    meses = {
-        1: "JANEIRO",
-        2: "FEVEREIRO",
-        3: "MARÇO",
-        4: "ABRIL",
-        5: "MAIO",
-        6: "JUNHO",
-        7: "JULHO",
-        8: "AGOSTO",
-        9: "SETEMBRO",
-        10: "OUTUBRO",
-        11: "NOVEMBRO",
-        12: "DEZEMBRO",
-    }
-
-    for mes_num, mes_nome in meses.items():
-        if mes_nome in df.columns:
-            df[f"meta_{mes_num}"] = df[mes_nome].apply(moeda_para_float)
-        else:
-            df[f"meta_{mes_num}"] = 0.0
-
-    return df
+def carregar_csv(nome):
+    caminho = DATA_DIR / nome
+    if caminho.exists():
+        return pd.read_csv(caminho)
+    return pd.DataFrame()
 
 
-pedidos = carregar_pedidos()
-clientes = carregar_clientes()
+pedidos = carregar_csv("pedidos.csv")
+itens = carregar_csv("itens_pedido.csv")
+metas = carregar_csv("metas_inteligentes.csv")
 
+if "assessor" not in pedidos.columns:
+    pedidos["assessor"] = "SEM ASSESSOR"
+
+if "assessor" not in itens.columns:
+    itens["assessor"] = "SEM ASSESSOR"
+
+if not metas.empty and "assessor" not in metas.columns:
+    metas["assessor"] = "SEM ASSESSOR"
+
+pedidos["total_pedido"] = pd.to_numeric(pedidos["total_pedido"], errors="coerce").fillna(0)
+itens["valor_total_item"] = pd.to_numeric(itens["valor_total_item"], errors="coerce").fillna(0)
+itens["quantidade"] = pd.to_numeric(itens["quantidade"], errors="coerce").fillna(0)
+
+pedidos["data_pedido_dt"] = pd.to_datetime(
+    pedidos["data_pedido"],
+    format="%d/%m/%Y",
+    errors="coerce"
+)
+
+if not metas.empty:
+    for col in [
+        "meta",
+        "realizado",
+        "percentual_realizado",
+        "meta_proporcional_hoje",
+        "diferenca_vs_meta_proporcional",
+        "media_diaria_realizada",
+        "projecao_mes",
+        "percentual_projetado",
+        "gap_projetado",
+        "valor_faltante_meta",
+        "ritmo_diario_necessario"
+    ]:
+        if col in metas.columns:
+            metas[col] = pd.to_numeric(metas[col], errors="coerce").fillna(0)
 
 # =========================
 # CABEÇALHO
 # =========================
 
-col_logo, col_titulo = st.columns([1, 5])
+col_logo, col_titulo = st.columns([1, 6])
 
 with col_logo:
     if LOGO_PATH.exists():
         st.image(str(LOGO_PATH), width=120)
+    else:
+        st.markdown("## 📊")
 
 with col_titulo:
     st.markdown(
@@ -188,12 +136,11 @@ with col_titulo:
         unsafe_allow_html=True
     )
     st.markdown(
-        '<div class="sub-title">Painel Executivo MIOS — Operação Digital</div>',
+        '<div class="sub-title">Painel de Controle</div>',
         unsafe_allow_html=True
     )
 
 st.caption("Inteligência comercial multiempresa integrada ao Tiny ERP")
-
 
 # =========================
 # FILTROS
@@ -201,130 +148,45 @@ st.caption("Inteligência comercial multiempresa integrada ao Tiny ERP")
 
 st.sidebar.title("Filtros")
 
-anos = sorted(pedidos["ano"].dropna().astype(int).unique())
+assessores = sorted(pedidos["assessor"].dropna().unique())
+assessores_filtro = st.sidebar.multiselect("Assessor", assessores, default=assessores)
 
-if not anos:
-    st.error("Nenhum pedido digital encontrado na base.")
-    st.stop()
-
-ano_filtro = st.sidebar.selectbox("Ano", anos, index=len(anos) - 1)
-
-meses_disponiveis = sorted(
-    pedidos[pedidos["ano"] == ano_filtro]["mes"].dropna().astype(int).unique()
+empresas_disponiveis = sorted(
+    pedidos[pedidos["assessor"].isin(assessores_filtro)]["empresa"].dropna().unique()
 )
 
-opcoes_meses = ["Todos"] + meses_disponiveis
+empresas_filtro = st.sidebar.multiselect("Empresas", empresas_disponiveis, default=empresas_disponiveis)
 
-mes_filtro = st.sidebar.selectbox(
-    "Mês",
-    opcoes_meses,
-    index=len(opcoes_meses) - 1
-)
+canais = sorted(pedidos["canal"].dropna().unique())
+ufs = sorted(pedidos["uf"].dropna().unique())
 
-assessores = sorted(clientes["ASSESSOR"].dropna().unique())
+canais_filtro = st.sidebar.multiselect("Canais", canais, default=canais)
+ufs_filtro = st.sidebar.multiselect("UF", ufs, default=ufs)
 
-assessores_filtro = st.sidebar.multiselect(
-    "Assessores",
-    assessores,
-    default=assessores
-)
-
-status_clientes = sorted(clientes["STATUS"].dropna().unique())
-
-status_filtro = st.sidebar.multiselect(
-    "Status cliente",
-    status_clientes,
-    default=status_clientes
-)
-
-canais = sorted(pedidos["canal_padronizado"].dropna().unique())
-
-canais_filtro = st.sidebar.multiselect(
-    "Canal digital",
-    canais,
-    default=canais
-)
-
-clientes_filtrados = clientes[
-    clientes["ASSESSOR"].isin(assessores_filtro)
-    & clientes["STATUS"].isin(status_filtro)
+base_pedidos = pedidos[
+    pedidos["assessor"].isin(assessores_filtro)
+    & pedidos["empresa"].isin(empresas_filtro)
+    & pedidos["canal"].isin(canais_filtro)
+    & pedidos["uf"].isin(ufs_filtro)
 ].copy()
 
-empresas_disponiveis = sorted(clientes_filtrados["EMPRESA"].dropna().unique())
+ids_pedidos = base_pedidos["id_pedido"].astype(str).unique()
+base_itens = itens[itens["id_pedido"].astype(str).isin(ids_pedidos)].copy()
 
-empresas_filtro = st.sidebar.multiselect(
-    "Empresas",
-    empresas_disponiveis,
-    default=empresas_disponiveis
-)
-
-empresas_norm_filtro = clientes_filtrados[
-    clientes_filtrados["EMPRESA"].isin(empresas_filtro)
-]["empresa_normalizada"].unique()
-
-
-# =========================
-# BASE FILTRADA
-# =========================
-
-base = pedidos[pedidos["ano"] == ano_filtro].copy()
-
-if mes_filtro != "Todos":
-    base = base[base["mes"] == int(mes_filtro)].copy()
-
-base = base[
-    base["empresa_normalizada"].isin(empresas_norm_filtro)
-    & base["canal_padronizado"].isin(canais_filtro)
-].copy()
-
-base = base.merge(
-    clientes[[
-        "empresa_normalizada",
-        "EMPRESA",
-        "ASSESSOR",
-        "STATUS",
-        "CONTRATO",
-        "COMISSÃO",
-        "meta_1",
-        "meta_2",
-        "meta_3",
-        "meta_4",
-        "meta_5",
-        "meta_6",
-        "meta_7",
-        "meta_8",
-        "meta_9",
-        "meta_10",
-        "meta_11",
-        "meta_12",
-    ]],
-    on="empresa_normalizada",
-    how="left"
-)
-
-if mes_filtro == "Todos":
-    metas_ref = clientes_filtrados[
-        clientes_filtrados["EMPRESA"].isin(empresas_filtro)
+if not metas.empty:
+    base_metas = metas[
+        metas["assessor"].isin(assessores_filtro)
+        & metas["empresa"].isin(empresas_filtro)
     ].copy()
-
-    colunas_meta = [f"meta_{m}" for m in meses_disponiveis]
-    metas_ref["meta_periodo"] = metas_ref[colunas_meta].sum(axis=1)
-
 else:
-    metas_ref = clientes_filtrados[
-        clientes_filtrados["EMPRESA"].isin(empresas_filtro)
-    ].copy()
-
-    metas_ref["meta_periodo"] = metas_ref[f"meta_{int(mes_filtro)}"]
-
+    base_metas = pd.DataFrame()
 
 # =========================
 # TOP BAR
 # =========================
 
 st.markdown(
-    '<span class="pill">🛒 operação digital</span>'
-    '<span class="pill">📅 período filtrado</span>'
+    '<span class="pill">📅 mês atual</span>'
     '<span class="pill">🔎 filtros ativos</span>'
     '<span class="pill">↻ atualizado agora</span>',
     unsafe_allow_html=True
@@ -332,55 +194,54 @@ st.markdown(
 
 st.divider()
 
-
 # =========================
-# KPIS
+# KPIs
 # =========================
 
-faturamento = base["total_pedido"].sum()
-pedidos_qtd = base["id_pedido"].nunique()
-clientes_qtd = base["cpf_cnpj_cliente"].nunique() if "cpf_cnpj_cliente" in base.columns else 0
+faturamento = base_pedidos["total_pedido"].sum()
+qtd_pedidos = base_pedidos["id_pedido"].nunique()
+ticket_medio = base_pedidos["total_pedido"].mean() if qtd_pedidos else 0
+clientes = base_pedidos["cpf_cnpj_cliente"].nunique()
+itens_vendidos = base_itens["quantidade"].sum()
 
-meta_total = metas_ref["meta_periodo"].sum()
-contrato_total = metas_ref["CONTRATO"].sum()
-comissao_total = metas_ref["COMISSÃO"].sum()
-
-percentual_meta = faturamento / meta_total if meta_total > 0 else 0
+meta_total = base_metas["meta"].sum() if not base_metas.empty and "meta" in base_metas.columns else 0
+realizado_meta = base_metas["realizado"].sum() if not base_metas.empty and "realizado" in base_metas.columns else faturamento
+projecao_total = base_metas["projecao_mes"].sum() if not base_metas.empty and "projecao_mes" in base_metas.columns else 0
+perc_meta = realizado_meta / meta_total if meta_total else 0
 
 k1, k2, k3, k4, k5 = st.columns(5)
 
-k1.metric("Faturamento Digital", moeda(faturamento))
-k2.metric("Meta Digital", moeda(meta_total))
-k3.metric("% Meta", percentual(percentual_meta))
-k4.metric("Pedidos Digitais", numero(pedidos_qtd))
-k5.metric("Clientes", numero(clientes_qtd))
+k1.metric("Faturamento", moeda(faturamento))
+k2.metric("Meta mensal", moeda(meta_total))
+k3.metric("% meta", percentual(perc_meta))
+k4.metric("Projeção", moeda(projecao_total))
+k5.metric("Pedidos", numero(qtd_pedidos))
 
-st.caption(f"Atualizado em {datetime.now().strftime('%d/%m/%Y %H:%M')}")
-
+st.caption(f"Última atualização visual: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
 # =========================
 # ABAS
 # =========================
 
-aba_vendas, aba_metas, aba_canais, aba_temporal, aba_assessores, aba_clientes, aba_financeiro, aba_dados = st.tabs([
-    "📈 Vendas",
+aba_vendas, aba_metas, aba_assessor, aba_empresas, aba_produtos, aba_clientes, aba_alertas, aba_dados = st.tabs([
+    "📌 Vendas",
     "🎯 Metas",
-    "🛒 Canais",
-    "📅 Temporal",
     "🧑‍💼 Assessores",
-    "🏢 Clientes",
-    "💰 Financeiro",
+    "🏢 Empresas",
+    "📦 Produtos",
+    "👥 Clientes",
+    "🚨 Alertas",
     "🧾 Dados"
 ])
-
-
 # =========================
 # VENDAS
 # =========================
 
 with aba_vendas:
+
     vendas_dia = (
-        base.dropna(subset=["data_pedido_dt"])
+        base_pedidos
+        .dropna(subset=["data_pedido_dt"])
         .groupby("data_pedido_dt", as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
@@ -389,283 +250,326 @@ with aba_vendas:
         .sort_values("data_pedido_dt")
     )
 
-    fig = px.area(
+    fig_vendas = px.area(
         vendas_dia,
         x="data_pedido_dt",
         y="faturamento",
-        title="Faturamento digital diário"
+        title="Evolução diária do faturamento"
     )
 
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig_vendas, width="stretch")
 
     col1, col2 = st.columns(2)
 
     resumo_canal = (
-        base.groupby("canal_padronizado", as_index=False)
-        .agg(faturamento=("total_pedido", "sum"))
+        base_pedidos
+        .groupby("canal", as_index=False)
+        .agg(
+            faturamento=("total_pedido", "sum")
+        )
         .sort_values("faturamento", ascending=False)
     )
 
     fig_canal = px.pie(
         resumo_canal,
-        names="canal_padronizado",
+        names="canal",
         values="faturamento",
-        title="Share por canal digital"
+        title="Share por canal"
     )
 
     col1.plotly_chart(fig_canal, width="stretch")
+    col1.dataframe(formatar_tabela(resumo_canal), width="stretch")
 
-    if "uf" in base.columns:
-        resumo_uf = (
-            base.groupby("uf", as_index=False)
-            .agg(faturamento=("total_pedido", "sum"))
-            .sort_values("faturamento", ascending=False)
+    resumo_uf = (
+        base_pedidos
+        .groupby("uf", as_index=False)
+        .agg(
+            faturamento=("total_pedido", "sum")
         )
+        .sort_values("faturamento", ascending=False)
+    )
 
-        fig_uf = px.bar(
-            resumo_uf.head(15),
-            x="uf",
-            y="faturamento",
-            title="Top UFs — digital"
-        )
+    fig_uf = px.bar(
+        resumo_uf.head(15),
+        x="uf",
+        y="faturamento",
+        title="Top UFs"
+    )
 
-        col2.plotly_chart(fig_uf, width="stretch")
-
+    col2.plotly_chart(fig_uf, width="stretch")
+    col2.dataframe(formatar_tabela(resumo_uf), width="stretch")
 
 # =========================
 # METAS
 # =========================
 
 with aba_metas:
-    realizado = (
-        base.groupby("empresa_normalizada", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique")
+
+    st.subheader("Meta Inteligente")
+
+    if base_metas.empty:
+        st.warning("Nenhuma meta encontrada.")
+    else:
+
+        col1, col2, col3, col4 = st.columns(4)
+
+        empresas_risco = len(
+            base_metas[
+                base_metas["status_meta"].astype(str).str.contains("RISCO")
+            ]
         )
-    )
 
-    metas_view = metas_ref.merge(
-        realizado,
-        on="empresa_normalizada",
-        how="left"
-    )
-
-    metas_view["faturamento"] = metas_view["faturamento"].fillna(0)
-    metas_view["pedidos"] = metas_view["pedidos"].fillna(0)
-
-    metas_view["percentual_meta"] = metas_view.apply(
-        lambda x: x["faturamento"] / x["meta_periodo"] if x["meta_periodo"] > 0 else 0,
-        axis=1
-    )
-
-    metas_view["gap"] = metas_view["faturamento"] - metas_view["meta_periodo"]
-
-    metas_view["status_meta"] = metas_view["percentual_meta"].apply(
-        lambda x: "🟢 Saudável" if x >= 1 else ("🟡 Atenção" if x >= 0.85 else "🔴 Risco")
-    )
-
-    col1, col2, col3 = st.columns(3)
-    col1.metric("🔴 Risco", numero((metas_view["status_meta"] == "🔴 Risco").sum()))
-    col2.metric("🟡 Atenção", numero((metas_view["status_meta"] == "🟡 Atenção").sum()))
-    col3.metric("🟢 Saudável", numero((metas_view["status_meta"] == "🟢 Saudável").sum()))
-
-    fig_meta = px.bar(
-        metas_view.sort_values("percentual_meta", ascending=False),
-        x="EMPRESA",
-        y="percentual_meta",
-        color="ASSESSOR",
-        title="Atingimento de meta digital"
-    )
-
-    st.plotly_chart(fig_meta, width="stretch")
-
-    tabela = metas_view[[
-        "ASSESSOR",
-        "STATUS",
-        "EMPRESA",
-        "meta_periodo",
-        "faturamento",
-        "percentual_meta",
-        "gap",
-        "pedidos",
-        "status_meta"
-    ]].copy()
-
-    tabela["meta_periodo"] = tabela["meta_periodo"].apply(moeda)
-    tabela["faturamento"] = tabela["faturamento"].apply(moeda)
-    tabela["percentual_meta"] = tabela["percentual_meta"].apply(percentual)
-    tabela["gap"] = tabela["gap"].apply(moeda)
-
-    st.dataframe(tabela, width="stretch")
-
-
-# =========================
-# CANAIS
-# =========================
-
-with aba_canais:
-    st.subheader("Performance por canal digital")
-
-    canais_view = (
-        base.groupby("canal_padronizado", as_index=False)
-        .agg(
-            faturamento=("total_pedido", "sum"),
-            pedidos=("id_pedido", "nunique"),
-            clientes=("cpf_cnpj_cliente", "nunique") if "cpf_cnpj_cliente" in base.columns else ("id_pedido", "nunique")
+        empresas_atencao = len(
+            base_metas[
+                base_metas["status_meta"].astype(str).str.contains("ATEN")
+            ]
         )
-        .sort_values("faturamento", ascending=False)
-    )
 
-    total_canais = canais_view["faturamento"].sum()
-    canais_view["participacao"] = canais_view["faturamento"] / total_canais if total_canais else 0
+        empresas_saudavel = len(
+            base_metas[
+                base_metas["status_meta"].astype(str).str.contains("SAUD")
+            ]
+        )
 
-    fig_canais = px.bar(
-        canais_view,
-        x="canal_padronizado",
-        y="faturamento",
-        title="Ranking de canais digitais",
-        text_auto=".2s"
-    )
+        col1.metric("🔴 Risco", numero(empresas_risco))
+        col2.metric("🟡 Atenção", numero(empresas_atencao))
+        col3.metric("🟢 Saudável", numero(empresas_saudavel))
+        col4.metric("Meta total", moeda(meta_total))
 
-    st.plotly_chart(fig_canais, width="stretch")
+        ranking_meta = (
+            base_metas
+            .sort_values("percentual_projetado", ascending=True)
+        )
 
-    tabela_canais = canais_view.copy()
-    tabela_canais["faturamento"] = tabela_canais["faturamento"].apply(moeda)
-    tabela_canais["participacao"] = tabela_canais["participacao"].apply(percentual)
+        fig_meta = px.bar(
+            ranking_meta,
+            x="empresa",
+            y="percentual_projetado",
+            color="status_meta",
+            title="Projeção de atingimento da meta",
+            text_auto=".0%"
+        )
 
-    st.dataframe(tabela_canais, width="stretch")
+        st.plotly_chart(fig_meta, width="stretch")
 
+        metas_view = ranking_meta[[
+            "assessor",
+            "empresa",
+            "meta",
+            "realizado",
+            "percentual_realizado",
+            "projecao_mes",
+            "percentual_projetado",
+            "gap_projetado",
+            "ritmo_diario_necessario",
+            "status_meta"
+        ]].copy()
 
-# =========================
-# TEMPORAL
-# =========================
-
-with aba_temporal:
-    temporal = pedidos.merge(
-        clientes[["empresa_normalizada", "ASSESSOR", "STATUS", "EMPRESA"]],
-        on="empresa_normalizada",
-        how="left"
-    )
-
-    temporal = temporal[
-        temporal["ASSESSOR"].isin(assessores_filtro)
-        & temporal["STATUS"].isin(status_filtro)
-        & temporal["empresa_normalizada"].isin(empresas_norm_filtro)
-        & temporal["canal_padronizado"].isin(canais_filtro)
-    ].copy()
-
-    resumo = (
-        temporal.groupby(["ano", "mes"], as_index=False)
-        .agg(faturamento=("total_pedido", "sum"))
-        .sort_values(["ano", "mes"])
-    )
-
-    resumo["mes_ano"] = (
-        resumo["mes"].astype(int).astype(str).str.zfill(2)
-        + "/"
-        + resumo["ano"].astype(int).astype(str)
-    )
-
-    fig_temporal = px.line(
-        resumo,
-        x="mes_ano",
-        y="faturamento",
-        markers=True,
-        title="Evolução mensal digital"
-    )
-
-    st.plotly_chart(fig_temporal, width="stretch")
-
-    resumo["faturamento"] = resumo["faturamento"].apply(moeda)
-    st.dataframe(resumo, width="stretch")
-
+        st.dataframe(
+            formatar_tabela(metas_view),
+            width="stretch"
+        )
 
 # =========================
 # ASSESSORES
 # =========================
 
-with aba_assessores:
-    ranking = (
-        base.groupby("ASSESSOR", as_index=False)
+with aba_assessor:
+
+    ranking_assessor = (
+        base_pedidos
+        .groupby("assessor", as_index=False)
         .agg(
             faturamento=("total_pedido", "sum"),
             pedidos=("id_pedido", "nunique"),
-            empresas=("EMPRESA", "nunique")
+            clientes=("cpf_cnpj_cliente", "nunique"),
+            ticket_medio=("total_pedido", "mean")
         )
         .sort_values("faturamento", ascending=False)
     )
 
+    total_assessor = ranking_assessor["faturamento"].sum()
+
+    ranking_assessor["participacao"] = (
+        ranking_assessor["faturamento"] / total_assessor
+        if total_assessor else 0
+    )
+
     fig_assessor = px.bar(
-        ranking,
-        x="ASSESSOR",
+        ranking_assessor,
+        x="assessor",
         y="faturamento",
-        title="Faturamento digital por assessor"
+        title="Ranking de assessores",
+        text_auto=".2s"
     )
 
     st.plotly_chart(fig_assessor, width="stretch")
+    st.dataframe(formatar_tabela(ranking_assessor), width="stretch")
 
-    ranking["faturamento"] = ranking["faturamento"].apply(moeda)
-    st.dataframe(ranking, width="stretch")
+# =========================
+# EMPRESAS
+# =========================
 
+with aba_empresas:
+
+    ranking_empresas = (
+        base_pedidos
+        .groupby(["assessor", "empresa"], as_index=False)
+        .agg(
+            faturamento=("total_pedido", "sum"),
+            pedidos=("id_pedido", "nunique"),
+            clientes=("cpf_cnpj_cliente", "nunique"),
+            ticket_medio=("total_pedido", "mean")
+        )
+        .sort_values("faturamento", ascending=False)
+    )
+
+    total_empresas = ranking_empresas["faturamento"].sum()
+
+    ranking_empresas["participacao"] = (
+        ranking_empresas["faturamento"] / total_empresas
+        if total_empresas else 0
+    )
+
+    fig_empresas = px.bar(
+        ranking_empresas,
+        x="empresa",
+        y="faturamento",
+        color="assessor",
+        title="Ranking de empresas",
+        text_auto=".2s"
+    )
+
+    st.plotly_chart(fig_empresas, width="stretch")
+    st.dataframe(formatar_tabela(ranking_empresas), width="stretch")
+
+# =========================
+# PRODUTOS
+# =========================
+
+with aba_produtos:
+
+    top_produtos = (
+        base_itens
+        .groupby(["codigo_produto", "descricao_produto"], as_index=False)
+        .agg(
+            faturamento=("valor_total_item", "sum"),
+            quantidade=("quantidade", "sum")
+        )
+        .sort_values("faturamento", ascending=False)
+    )
+
+    fig_prod = px.bar(
+        top_produtos.head(20),
+        x="faturamento",
+        y="descricao_produto",
+        orientation="h",
+        title="Top produtos"
+    )
+
+    fig_prod.update_layout(
+        yaxis={"categoryorder": "total ascending"}
+    )
+
+    st.plotly_chart(fig_prod, width="stretch")
+    st.dataframe(formatar_tabela(top_produtos), width="stretch")
 
 # =========================
 # CLIENTES
 # =========================
 
 with aba_clientes:
-    clientes_view = (
-        base.groupby(["ASSESSOR", "STATUS", "EMPRESA"], as_index=False)
+
+    top_clientes = (
+        base_pedidos
+        .groupby(
+            ["assessor", "cliente", "cpf_cnpj_cliente"],
+            as_index=False
+        )
         .agg(
             faturamento=("total_pedido", "sum"),
             pedidos=("id_pedido", "nunique"),
-            clientes=("cpf_cnpj_cliente", "nunique") if "cpf_cnpj_cliente" in base.columns else ("id_pedido", "nunique")
+            ticket_medio=("total_pedido", "mean")
         )
         .sort_values("faturamento", ascending=False)
     )
 
-    clientes_view["faturamento"] = clientes_view["faturamento"].apply(moeda)
-    st.dataframe(clientes_view, width="stretch")
+    recorrentes = top_clientes[
+        top_clientes["pedidos"] >= 2
+    ]
 
+    col1, col2 = st.columns(2)
+
+    col1.metric(
+        "Clientes recorrentes",
+        numero(len(recorrentes))
+    )
+
+    perc_recorrentes = (
+        len(recorrentes) / len(top_clientes)
+        if len(top_clientes)
+        else 0
+    )
+
+    col2.metric(
+        "% recorrentes",
+        percentual(perc_recorrentes)
+    )
+
+    st.dataframe(
+        formatar_tabela(top_clientes.head(200)),
+        width="stretch"
+    )
 
 # =========================
-# FINANCEIRO
+# ALERTAS
 # =========================
 
-with aba_financeiro:
-    col1, col2, col3 = st.columns(3)
+with aba_alertas:
 
-    col1.metric("Contrato escritório", moeda(contrato_total))
-    col2.metric("Comissão clientes", moeda(comissao_total))
-    col3.metric("Clientes na carteira", numero(len(metas_ref)))
+    alertas = []
 
-    financeiro = metas_ref[[
-        "ASSESSOR",
-        "STATUS",
-        "EMPRESA",
-        "CONTRATO",
-        "COMISSÃO"
-    ]].copy()
+    if not base_metas.empty:
 
-    financeiro["CONTRATO"] = financeiro["CONTRATO"].apply(moeda)
-    financeiro["COMISSÃO"] = financeiro["COMISSÃO"].apply(moeda)
+        risco = base_metas[
+            base_metas["status_meta"]
+            .astype(str)
+            .str.contains("RISCO")
+        ]
 
-    st.dataframe(financeiro, width="stretch")
+        for _, row in risco.iterrows():
+            alertas.append(
+                f"🔴 {row['empresa']} está em risco. "
+                f"Projetado: {percentual(row['percentual_projetado'])}"
+            )
 
+    if alertas:
+        for alerta in alertas:
+            st.warning(alerta)
+    else:
+        st.success("Nenhum alerta crítico encontrado.")
 
 # =========================
 # DADOS
 # =========================
 
 with aba_dados:
-    st.subheader("Pedidos digitais filtrados")
-    st.dataframe(base.head(1000), width="stretch")
 
-    st.subheader("Cadastro de clientes")
-
-    clientes_view = clientes.drop(
-        columns=["CNPJ", "CHAVE API TINY"],
-        errors="ignore"
+    st.subheader("Pedidos")
+    st.dataframe(
+        formatar_tabela(base_pedidos.head(1000)),
+        width="stretch"
     )
 
-    st.dataframe(clientes_view, width="stretch")
+    st.subheader("Itens")
+    st.dataframe(
+        formatar_tabela(base_itens.head(1000)),
+        width="stretch"
+    )
+
+    if not base_metas.empty:
+        st.subheader("Metas")
+        st.dataframe(
+            formatar_tabela(base_metas),
+            width="stretch"
+        )
