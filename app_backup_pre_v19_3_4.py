@@ -41,34 +41,27 @@ def caminho_arquivo(nome):
         LOCAL_CONFIG_DIR / nome,
         DATA_DIR / nome,
     ]
-
     for caminho in opcoes:
         if caminho.exists():
             return caminho
-
     return DATA_DIR / nome
 
 
 def normalizar(texto):
     if pd.isna(texto):
         return ""
-
     texto = str(texto).upper().strip()
     texto = unicodedata.normalize("NFD", texto)
     texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
-
     return " ".join(texto.split())
 
 
 def moeda_para_float(valor):
     if pd.isna(valor):
         return 0.0
-
     valor = str(valor).replace("R$", "").replace(" ", "").strip()
-
     if "," in valor:
         valor = valor.replace(".", "").replace(",", ".")
-
     try:
         return float(valor)
     except Exception:
@@ -162,25 +155,8 @@ def carregar_clientes():
     return df
 
 
-@st.cache_data
-def carregar_consultivo():
-    caminho = caminho_arquivo("inteligencia_consultiva.csv")
-
-    if not caminho.exists():
-        return pd.DataFrame()
-
-    df = pd.read_csv(caminho, low_memory=False)
-
-    for col in ["faturamento", "meta", "percentual_meta", "share_principal_canal", "tendencia_percentual", "score_total"]:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-
-    return df
-
-
 pedidos = carregar_pedidos()
 clientes = carregar_clientes()
-consultivo = carregar_consultivo()
 
 
 col_logo, col_titulo = st.columns([1, 5])
@@ -211,6 +187,7 @@ meses_disponiveis = sorted(
 )
 
 opcoes_meses = ["Todos"] + meses_disponiveis
+
 mes_filtro = st.sidebar.selectbox("Mês", opcoes_meses, index=len(opcoes_meses) - 1)
 
 tipos_venda = sorted(pedidos["tipo_venda"].dropna().unique())
@@ -229,12 +206,15 @@ if tipo_venda_filtro != "Todos":
     base_tipo = base_tipo[base_tipo["tipo_venda"] == tipo_venda_filtro].copy()
 
 canais = sorted(base_tipo["canal_estrategico"].dropna().unique())
+
 canais_filtro = st.sidebar.multiselect("Canal estratégico", canais, default=canais)
 
 assessores = sorted(clientes["ASSESSOR"].dropna().unique())
+
 assessores_filtro = st.sidebar.multiselect("Assessores", assessores, default=assessores)
 
 status_clientes = sorted(clientes["STATUS"].dropna().unique())
+
 status_filtro = st.sidebar.multiselect("Status cliente", status_clientes, default=status_clientes)
 
 clientes_filtrados = clientes[
@@ -243,6 +223,7 @@ clientes_filtrados = clientes[
 ].copy()
 
 empresas_disponiveis = sorted(clientes_filtrados["EMPRESA"].dropna().unique())
+
 empresas_filtro = st.sidebar.multiselect("Empresas", empresas_disponiveis, default=empresas_disponiveis)
 
 empresas_norm_filtro = clientes_filtrados[
@@ -283,24 +264,6 @@ else:
     metas_ref["meta_periodo"] = metas_ref[f"meta_{int(mes_filtro)}"]
 
 
-consultivo_base = consultivo.copy()
-
-if not consultivo_base.empty:
-    if "assessor" in consultivo_base.columns:
-        consultivo_base["assessor"] = consultivo_base["assessor"].astype(str).str.strip().str.upper()
-        consultivo_base = consultivo_base[consultivo_base["assessor"].isin(assessores_filtro)]
-
-    if "status_cliente" in consultivo_base.columns:
-        consultivo_base["status_cliente"] = consultivo_base["status_cliente"].astype(str).str.strip().str.upper()
-        consultivo_base = consultivo_base[consultivo_base["status_cliente"].isin(status_filtro)]
-
-    if "empresa" in consultivo_base.columns:
-        consultivo_base = consultivo_base[consultivo_base["empresa"].isin(empresas_filtro)]
-
-    if "principal_canal" in consultivo_base.columns:
-        consultivo_base = consultivo_base[consultivo_base["principal_canal"].isin(canais_filtro)]
-
-
 st.markdown(
     f'<span class="pill">🛒 Tipo: {tipo_venda_filtro}</span>'
     f'<span class="pill">📅 Ano: {ano_filtro}</span>'
@@ -322,35 +285,21 @@ comissao_total = metas_ref["COMISSÃO"].sum()
 
 percentual_meta = faturamento / meta_total if meta_total > 0 else 0
 
-criticos = 0
-saudaveis = 0
-score_medio = 0
-
-if not consultivo_base.empty and "status_saude" in consultivo_base.columns:
-    criticos = consultivo_base["status_saude"].astype(str).str.contains("CRÍTICO", na=False).sum()
-    saudaveis = consultivo_base["status_saude"].astype(str).str.contains("SAUDÁVEL", na=False).sum()
-
-if not consultivo_base.empty and "score_total" in consultivo_base.columns:
-    score_medio = consultivo_base["score_total"].mean()
-
-
-k1, k2, k3, k4, k5, k6 = st.columns(6)
+k1, k2, k3, k4, k5 = st.columns(5)
 
 k1.metric("Faturamento", moeda(faturamento))
 k2.metric("Meta", moeda(meta_total))
 k3.metric("% Meta", percentual(percentual_meta))
 k4.metric("Pedidos", numero(pedidos_qtd))
-k5.metric("🔴 Críticos", numero(criticos))
-k6.metric("Score médio", numero(score_medio))
+k5.metric("Clientes", numero(clientes_qtd))
 
 st.caption(f"Atualizado em {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
 
-aba_vendas, aba_metas, aba_canais, aba_consultivo, aba_temporal, aba_assessores, aba_clientes, aba_financeiro, aba_dados = st.tabs([
+aba_vendas, aba_metas, aba_canais, aba_temporal, aba_assessores, aba_clientes, aba_financeiro, aba_dados = st.tabs([
     "📈 Vendas",
     "🎯 Metas",
     "🛒 Canais",
-    "🧠 Consultivo",
     "📅 Temporal",
     "🧑‍💼 Assessores",
     "🏢 Clientes",
@@ -463,89 +412,6 @@ with aba_canais:
     tabela_canais["participacao"] = tabela_canais["participacao"].apply(percentual)
 
     st.dataframe(tabela_canais, width="stretch")
-
-
-with aba_consultivo:
-    st.subheader("🧠 Inteligência Consultiva")
-
-    if consultivo_base.empty:
-        st.warning("Arquivo inteligencia_consultiva.csv não encontrado ou sem dados para os filtros atuais.")
-    else:
-        c1, c2, c3, c4 = st.columns(4)
-
-        c1.metric("Empresas analisadas", numero(len(consultivo_base)))
-        c2.metric("🔴 Críticas", numero(consultivo_base["status_saude"].astype(str).str.contains("CRÍTICO", na=False).sum()))
-        c3.metric("🟡 Atenção", numero(consultivo_base["status_saude"].astype(str).str.contains("ATENÇÃO", na=False).sum()))
-        c4.metric("🟢 Saudáveis", numero(consultivo_base["status_saude"].astype(str).str.contains("SAUDÁVEL", na=False).sum()))
-
-        st.divider()
-
-        ranking_risco = consultivo_base.sort_values(["score_total", "faturamento"], ascending=[True, False]).head(15)
-
-        fig_risco = px.bar(
-            ranking_risco,
-            x="score_total",
-            y="empresa",
-            color="status_saude",
-            orientation="h",
-            title="Ranking de risco consultivo"
-        )
-
-        fig_risco.update_layout(yaxis={"categoryorder": "total ascending"})
-        st.plotly_chart(fig_risco, width="stretch")
-
-        st.subheader("Alertas automáticos")
-
-        alertas_view = consultivo_base[[
-            "empresa",
-            "assessor",
-            "status_saude",
-            "score_total",
-            "principal_canal",
-            "share_principal_canal",
-            "percentual_meta",
-            "tendencia",
-            "alertas",
-            "faturamento",
-        ]].copy()
-
-        alertas_view = alertas_view.sort_values(["score_total", "faturamento"], ascending=[True, False])
-
-        alertas_view["share_principal_canal"] = alertas_view["share_principal_canal"].apply(percentual)
-        alertas_view["percentual_meta"] = alertas_view["percentual_meta"].apply(percentual)
-        alertas_view["faturamento"] = alertas_view["faturamento"].apply(moeda)
-
-        st.dataframe(alertas_view, width="stretch")
-
-        st.subheader("Dependência por canal principal")
-
-        dependencia = (
-            consultivo_base.groupby("principal_canal", as_index=False)
-            .agg(
-                empresas=("empresa", "count"),
-                faturamento=("faturamento", "sum"),
-                score_medio=("score_total", "mean"),
-                share_medio=("share_principal_canal", "mean"),
-            )
-            .sort_values("faturamento", ascending=False)
-        )
-
-        fig_dep = px.bar(
-            dependencia,
-            x="principal_canal",
-            y="faturamento",
-            title="Faturamento por principal canal consultivo",
-            text_auto=".2s"
-        )
-
-        st.plotly_chart(fig_dep, width="stretch")
-
-        dep_tabela = dependencia.copy()
-        dep_tabela["faturamento"] = dep_tabela["faturamento"].apply(moeda)
-        dep_tabela["score_medio"] = dep_tabela["score_medio"].round(1)
-        dep_tabela["share_medio"] = dep_tabela["share_medio"].apply(percentual)
-
-        st.dataframe(dep_tabela, width="stretch")
 
 
 with aba_temporal:

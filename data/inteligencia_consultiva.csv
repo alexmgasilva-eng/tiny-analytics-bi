@@ -1,0 +1,20 @@
+﻿empresa,assessor,status_cliente,faturamento,pedidos,meta,percentual_meta,quantidade_canais,principal_canal,share_principal_canal,tendencia_percentual,tendencia,score_meta,score_concentracao,score_tendencia,score_diversidade,score_total,status_saude,alertas,data_processamento
+BALAO DE OFERTAS,JOYCE ,ATIVO,25951.59,264,46732.31,0.5553,1,Marketplace Não Identificado,1.0,43.1418,Crescimento,10,5,20,5,40,🔴 CRÍTICO,Dependência crítica Marketplace Não Identificado | Meta crítica | Canal único,22/05/2026 14:17:51
+BELLA COMERCIAL,JOYCE ,ATIVO,12164.23,56,51901.41,0.2344,1,Marketplace Não Identificado,1.0,103.1723,Crescimento,10,5,20,5,40,🔴 CRÍTICO,Dependência crítica Marketplace Não Identificado | Meta crítica | Canal único,22/05/2026 14:17:51
+MVS,JOYCE ,ATIVO,13349.6,39,36882.05,0.362,2,Marketplace Não Identificado,0.9916,11.7896,Crescimento,10,5,20,10,45,🔴 CRÍTICO,Dependência crítica Marketplace Não Identificado | Meta crítica,22/05/2026 14:17:51
+BIDU SHOP,JOYCE ,ATIVO,796676.82,3657,48716.48,16.3533,1,Marketplace Hub,1.0,-0.5055,Queda,40,5,5,5,55,🔴 CRÍTICO,Dependência crítica Marketplace Hub | Operação em queda | Canal único,22/05/2026 14:17:51
+CAJON MARCOS BRANDÃO LTDA,JOYCE ,ATIVO,87527.68,188,39632.64,2.2085,1,Mercado Livre,1.0,-0.4763,Queda,40,5,5,5,55,🔴 CRÍTICO,Dependência crítica Mercado Livre | Operação em queda | Canal único,22/05/2026 14:17:51
+CH BIKE BONNER,CHRIS,ATIVO,40181.41,70,10464.29,3.8399,1,Mercado Livre,1.0,-0.9939,Queda,40,5,5,5,55,🔴 CRÍTICO,Dependência crítica Mercado Livre | Operação em queda | Canal único,22/05/2026 14:17:51
+CH BIKE LPS,CHRIS,ATIVO,18939.18,35,1160.33,16.3222,1,Mercado Livre,1.0,-0.994,Queda,40,5,5,5,55,🔴 CRÍTICO,Dependência crítica Mercado Livre | Operação em queda | Canal único,22/05/2026 14:17:51
+CH BIKE SLT,CHRIS,ATIVO,5381.56,10,3913.18,1.3752,1,Mercado Livre,1.0,-0.9928,Queda,40,5,5,5,55,🔴 CRÍTICO,Dependência crítica Mercado Livre | Operação em queda | Canal único,22/05/2026 14:17:51
+DOKI HOME,CHRIS,ATIVO,529348.61,616,27508.2,19.2433,2,Marketplace Não Identificado,0.8192,-0.5632,Queda,40,5,5,10,60,🟡 ATENÇÃO,Dependência crítica Marketplace Não Identificado | Operação em queda,22/05/2026 14:17:51
+DECO UTILIDADES,JOYCE ,ATIVO,204595.31,1306,1510.72,135.429,2,Marketplace Não Identificado,0.9755,-0.5517,Queda,40,5,5,10,60,🟡 ATENÇÃO,Dependência crítica Marketplace Não Identificado | Operação em queda,22/05/2026 14:17:51
+CH BIKE PASSI,CHRIS,ATIVO,73437.85,251,9122.14,8.0505,2,Mercado Livre,0.861,-0.8194,Queda,40,5,5,10,60,🟡 ATENÇÃO,Dependência crítica Mercado Livre | Operação em queda,22/05/2026 14:17:51
+DECO ELETRO,CHRIS,ATIVO,1029486.83,12711,226245.13,4.5503,4,Mercado Livre,0.6868,-0.2374,Queda,40,5,5,15,65,🟡 ATENÇÃO,Dependência elevada Mercado Livre | Operação em queda,22/05/2026 14:17:51
+OBA OBA,CHRIS,ATIVO,568432.1,11917,23685.08,23.9996,4,Loja Física,0.7651,-0.193,Queda,40,5,5,15,65,🟡 ATENÇÃO,Dependência crítica Loja Física | Operação em queda,22/05/2026 14:17:51
+NOTA STORE,JOYCE ,ATIVO,92941.56,2293,10851.94,8.5645,3,Mercado Livre,0.9505,-0.0264,Estável,40,5,15,10,70,🟡 ATENÇÃO,Dependência crítica Mercado Livre,22/05/2026 14:17:51
+SHALOM,CHRIS,ATIVO,70545.89,238,31958.35,2.2074,1,Marketplace Não Identificado,1.0,0.389,Crescimento,40,5,20,5,70,🟡 ATENÇÃO,Dependência crítica Marketplace Não Identificado | Canal único,22/05/2026 14:17:51
+AF ESTOFADOS,CHRIS,ATIVO,63447.63,41,27217.14,2.3312,3,Magalu,0.5056,-0.7819,Queda,40,15,5,10,70,🟡 ATENÇÃO,Dependência elevada Magalu | Operação em queda,22/05/2026 14:17:51
+LEKE MEIAS,JOYCE ,ATIVO,48381.33,1090,11800.93,4.0998,3,Marketplace Não Identificado,0.5666,-0.5488,Queda,40,15,5,10,70,🟡 ATENÇÃO,Dependência elevada Marketplace Não Identificado | Operação em queda,22/05/2026 14:17:51
+SO BEBE,JOYCE ,ATIVO,38150.14,61,8383.89,4.5504,1,Magalu,1.0,0.1847,Crescimento,40,5,20,5,70,🟡 ATENÇÃO,Dependência crítica Magalu | Canal único,22/05/2026 14:17:51
+DECO HOME,JOYCE ,ATIVO,349706.5,1037,91460.73,3.8236,4,Mercado Livre,0.8828,0.104,Crescimento,40,5,20,15,80,🟢 SAUDÁVEL,Dependência crítica Mercado Livre,22/05/2026 14:17:51
