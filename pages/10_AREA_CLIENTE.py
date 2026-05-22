@@ -7,24 +7,25 @@ import streamlit as st
 
 
 # =====================================================
-# MIOS V19.7.8.4 - ÁREA DO CLIENTE
-# MATCHING ROBUSTO CLIENTE + DADOS OPERACIONAIS
+# MIOS V19.7.8.5 - ÁREA DO CLIENTE
+# USA BASE REAL DO PROJETO
 # =====================================================
 
+BASE_PROJETO = Path(r"C:\Tiny_relatorio")
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 DATA_DIR = BASE_DIR / "data"
 RELATORIOS_DIR = DATA_DIR / "relatorios"
-ROOT_DIR = BASE_DIR.parent
 
-PDF_ORIGEM = ROOT_DIR / "data" / "consultivo" / "entrada" / "RELATORIO_EFACTOR_PROFISSIONAL.pdf"
+PDF_ORIGEM = BASE_PROJETO / "data" / "consultivo" / "entrada" / "RELATORIO_EFACTOR_PROFISSIONAL.pdf"
 PDF_PUBLICADO = RELATORIOS_DIR / "LEKE_MEIAS_RELATORIO_DIRETORIA.pdf"
 
-PEDIDOS_PATH = DATA_DIR / "pedidos_historico.csv"
-ACTIONS_PATH = DATA_DIR / "action_tracking_v19_7_3.csv"
-GOALS_PATH = DATA_DIR / "goal_evolution_v19_7_3.csv"
-INSIGHTS_PATH = DATA_DIR / "ai_insights_v19_7_3.csv"
-TIMELINE_PATH = DATA_DIR / "cliente_timeline_v19_7_3.csv"
-EVENTS_PATH = DATA_DIR / "consultive_events_v19_7_3.csv"
+PEDIDOS_PATH = BASE_PROJETO / "data" / "raw" / "pedidos_historico.csv"
+ACTIONS_PATH = BASE_PROJETO / "data" / "processed" / "action_tracking_v19_7_3.csv"
+GOALS_PATH = BASE_PROJETO / "data" / "processed" / "goal_evolution_v19_7_3.csv"
+INSIGHTS_PATH = BASE_PROJETO / "data" / "processed" / "ai_insights_v19_7_3.csv"
+TIMELINE_PATH = BASE_PROJETO / "data" / "processed" / "cliente_timeline_v19_7_3.csv"
+EVENTS_PATH = BASE_PROJETO / "data" / "processed" / "consultive_events_v19_7_3.csv"
 
 
 st.set_page_config(
@@ -50,10 +51,27 @@ def carregar_csv(path):
     if not path.exists():
         return pd.DataFrame()
 
+    # Tentativa 1: separador padrão vírgula
     try:
-        return pd.read_csv(path, sep=";", low_memory=False)
+        df = pd.read_csv(path, low_memory=False)
+        if len(df.columns) > 1:
+            return df
     except Exception:
-        return pd.read_csv(path, low_memory=False)
+        pass
+
+    # Tentativa 2: separador ponto e vírgula
+    try:
+        df = pd.read_csv(path, sep=";", low_memory=False)
+        if len(df.columns) > 1:
+            return df
+    except Exception:
+        pass
+
+    # Tentativa 3: engine python com autodetecção
+    try:
+        return pd.read_csv(path, sep=None, engine="python", low_memory=False)
+    except Exception:
+        return pd.DataFrame()
 
 
 def garantir_coluna(df, coluna, valor_padrao):
@@ -179,7 +197,6 @@ def filtrar_cliente_robusto(df, coluna, cliente):
     if filtro_exato.any():
         return base[filtro_exato].drop(columns=["_cliente_norm_tmp"], errors="ignore").copy()
 
-    # fallback por primeira palavra relevante
     palavras = [p for p in alvo.split() if len(p) >= 3]
 
     if palavras:
@@ -189,7 +206,6 @@ def filtrar_cliente_robusto(df, coluna, cliente):
         if filtro_contains.any():
             return base[filtro_contains].drop(columns=["_cliente_norm_tmp"], errors="ignore").copy()
 
-    # fallback específico LEKE
     if "LEKE" in alvo:
         filtro_leke = base["_cliente_norm_tmp"].str.contains("LEKE", na=False)
 
@@ -247,11 +263,11 @@ timeline = carregar_csv(TIMELINE_PATH)
 events = carregar_csv(EVENTS_PATH)
 
 if actions.empty:
-    st.error("Arquivo action_tracking_v19_7_3.csv não encontrado ou vazio.")
+    st.error(f"Arquivo action_tracking não encontrado ou vazio: {ACTIONS_PATH}")
     st.stop()
 
 if pedidos.empty:
-    st.error("Arquivo pedidos_historico.csv não encontrado ou vazio.")
+    st.error(f"Arquivo pedidos_historico não encontrado ou vazio: {PEDIDOS_PATH}")
     st.stop()
 
 
@@ -309,7 +325,6 @@ events["cliente_norm"] = events["cliente"].apply(normalizar_nome)
 clientes_actions = set(actions["cliente"].dropna().astype(str).unique())
 clientes_pedidos = set(pedidos["empresa"].dropna().astype(str).unique())
 
-# prioriza clientes consultivos no topo, mas mantém todos
 clientes = sorted(clientes_actions.union(clientes_pedidos))
 
 cliente_default = clientes.index("LEKE MEIAS") if "LEKE MEIAS" in clientes else 0
@@ -392,6 +407,8 @@ events_base = filtrar_cliente_robusto(events, "cliente", cliente)
 # =====================================================
 
 with st.expander("🔎 Auditoria rápida de dados", expanded=True):
+    st.write("PEDIDOS_PATH:", str(PEDIDOS_PATH))
+    st.write("ACTIONS_PATH:", str(ACTIONS_PATH))
     st.write("Cliente selecionado:", cliente)
     st.write("Cliente normalizado:", cliente_norm)
     st.write("Linhas pedidos cliente:", len(pedidos_cliente))
@@ -401,11 +418,10 @@ with st.expander("🔎 Auditoria rápida de dados", expanded=True):
     st.write("Mês filtro:", mes_filtro)
     st.write("Linhas base mês:", len(base_mes))
 
-    st.write("Primeiros clientes com LEKE no histórico:")
     clientes_leke = sorted(
         pedidos[pedidos["empresa_norm"].str.contains("LEKE", na=False)]["empresa"].dropna().astype(str).unique()
     )
-    st.write(clientes_leke)
+    st.write("Primeiros clientes com LEKE no histórico:", clientes_leke)
 
     if not pedidos_cliente.empty:
         resumo = (

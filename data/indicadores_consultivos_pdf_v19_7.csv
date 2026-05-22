@@ -1,0 +1,12 @@
+﻿cliente,tipo,nome,valor,unidade,participacao
+LEKE MEIAS,faturamento_mensal_pdf,Janeiro,10159.63,R$,
+LEKE MEIAS,faturamento_mensal_pdf,Fevereiro,13254.21,R$,
+LEKE MEIAS,faturamento_mensal_pdf,Março,8618.72,R$,
+LEKE MEIAS,faturamento_mensal_pdf,Abril,11265.57,R$,
+LEKE MEIAS,pedidos_expedidos_pdf,Janeiro,191.0,pedidos,
+LEKE MEIAS,pedidos_expedidos_pdf,Fevereiro,284.0,pedidos,
+LEKE MEIAS,pedidos_expedidos_pdf,Março,219.0,pedidos,
+LEKE MEIAS,pedidos_expedidos_pdf,Abril,233.0,pedidos,
+LEKE MEIAS,marketplace_pdf,Shopee,24554.04,R$,0.5671
+LEKE MEIAS,marketplace_pdf,Mercado Livre,18354.7,R$,0.4239
+LEKE MEIAS,marketplace_pdf,Magalu,389.39,R$,0.009000000000000001
