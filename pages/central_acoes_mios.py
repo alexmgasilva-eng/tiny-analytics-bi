@@ -25,7 +25,7 @@ def carregar():
 df = carregar()
 
 st.title("🚀 Central de Ações MIOS")
-st.caption("Prioridades práticas para assessores e gestão")
+st.caption("Prioridades práticas para assessores e gestão da operação digital")
 
 assessores = sorted(df["ASSESSOR"].dropna().unique())
 status = sorted(df["status_saude"].dropna().unique())
@@ -55,9 +55,11 @@ st.subheader("🔥 Prioridade máxima")
 prioridade = base.sort_values("score_prioridade", ascending=False).head(10)
 
 for _, row in prioridade.iterrows():
+    canal = row.get("canal_principal", "Sem canal")
     st.warning(
         f"{row['EMPRESA']} | {row['ASSESSOR']} | "
-        f"{row['status_saude']} | Score {row['score_prioridade']} | "
+        f"{row['status_saude']} | Canal principal: {canal} | "
+        f"Score {row['score_prioridade']} | "
         f"{row['recomendacao']}"
     )
 
@@ -69,7 +71,7 @@ fig = px.bar(
     y="EMPRESA",
     color="status_saude",
     orientation="h",
-    title="Clientes que exigem mais atenção"
+    title="Clientes digitais que exigem mais atenção"
 )
 
 fig.update_layout(yaxis={"categoryorder": "total ascending"})
@@ -77,12 +79,14 @@ st.plotly_chart(fig, width="stretch")
 
 st.subheader("Plano de ação detalhado")
 
-tabela = base.sort_values("score_prioridade", ascending=False)[[
+cols = [
     "ASSESSOR",
     "STATUS",
     "EMPRESA",
     "status_saude",
     "score_prioridade",
+    "canal_principal",
+    "dependencia_canal_principal",
     "meta_mes",
     "realizado_mes",
     "percentual_meta",
@@ -93,13 +97,19 @@ tabela = base.sort_values("score_prioridade", ascending=False)[[
     "crescimento_vs_mes_anterior",
     "dias_sem_venda",
     "recomendacao"
-]].copy()
+]
+
+cols = [c for c in cols if c in base.columns]
+
+tabela = base.sort_values("score_prioridade", ascending=False)[cols].copy()
 
 for col in ["meta_mes", "realizado_mes", "projecao_mes", "gap_projetado", "ritmo_diario_necessario"]:
-    tabela[col] = tabela[col].apply(moeda)
+    if col in tabela.columns:
+        tabela[col] = tabela[col].apply(moeda)
 
-for col in ["percentual_meta", "percentual_projetado", "crescimento_vs_mes_anterior"]:
-    tabela[col] = tabela[col].apply(percentual)
+for col in ["percentual_meta", "percentual_projetado", "crescimento_vs_mes_anterior", "dependencia_canal_principal"]:
+    if col in tabela.columns:
+        tabela[col] = tabela[col].apply(percentual)
 
 st.dataframe(tabela, width="stretch")
 

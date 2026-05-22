@@ -24,7 +24,7 @@ def carregar():
 df = carregar()
 
 st.title("📌 Resumo Executivo MIOS")
-st.caption("Visão rápida para tomada de decisão da consultoria")
+st.caption("Visão rápida para tomada de decisão da consultoria digital")
 
 assessores = sorted(df["ASSESSOR"].dropna().unique())
 assessor_filtro = st.sidebar.multiselect("Assessor", assessores, default=assessores)
@@ -43,15 +43,15 @@ perc_meta = realizado / meta if meta else 0
 perc_proj = projecao / meta if meta else 0
 
 c1, c2, c3, c4, c5 = st.columns(5)
-c1.metric("Meta", moeda(meta))
-c2.metric("Realizado", moeda(realizado))
+c1.metric("Meta digital", moeda(meta))
+c2.metric("Realizado digital", moeda(realizado))
 c3.metric("% Realizado", percentual(perc_meta))
 c4.metric("Projeção", moeda(projecao))
 c5.metric("Gap Projetado", moeda(gap))
 
 st.divider()
 
-st.subheader("Diagnóstico da carteira")
+st.subheader("Diagnóstico da carteira digital")
 
 st.write(f"""
 A carteira filtrada possui **{len(base)} clientes analisados**.
@@ -59,22 +59,23 @@ A carteira filtrada possui **{len(base)} clientes analisados**.
 - 🔴 **{len(criticos)} clientes críticos**
 - 🟢 **{len(saudaveis)} clientes saudáveis**
 - ⚪ **{len(onboarding)} clientes em onboarding**
-- Projeção atual: **{percentual(perc_proj)} da meta**
+- Projeção atual: **{percentual(perc_proj)} da meta digital**
 """)
 
 if gap < 0:
-    st.error(f"A carteira está projetando fechar abaixo da meta em {moeda(abs(gap))}.")
+    st.error(f"A carteira digital está projetando fechar abaixo da meta em {moeda(abs(gap))}.")
 else:
-    st.success(f"A carteira está projetando superar a meta em {moeda(gap)}.")
+    st.success(f"A carteira digital está projetando superar a meta em {moeda(gap)}.")
 
 st.subheader("Top prioridades")
 
 prioridades = base.sort_values("score_prioridade", ascending=False).head(10)
 
 for _, row in prioridades.iterrows():
+    canal = row.get("canal_principal", "Sem canal")
     st.warning(
         f"{row['EMPRESA']} | {row['ASSESSOR']} | "
-        f"{row['status_saude']} | "
+        f"{row['status_saude']} | Canal principal: {canal} | "
         f"Score {row['score_prioridade']} | "
         f"{row['recomendacao']}"
     )
@@ -104,4 +105,4 @@ resumo["% realizado"] = resumo["% realizado"].apply(percentual)
 
 st.dataframe(resumo, width="stretch")
 
-st.caption("Dados sensíveis protegidos: CNPJ e chave API não são exibidos nesta página.")
+st.caption("Dados sensíveis protegidos. CNPJ e chave API não são exibidos nesta página.")
